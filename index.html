@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ca" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Geosfera · Aula Next ESO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Nunito"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            navy: '#172744',
+            blue: { DEFAULT: '#044E9C', 50: '#edf5ff', 100: '#dbeafe', 400: '#6FA8EA', 600: '#034182', 700: '#044E9C' },
+            green: { DEFAULT: '#42B77E', 50: '#ecfdf5', 100: '#d1fae5', 400: '#7FD8AC', 600: '#2e9d67', 700: '#237d51' },
+            orange: { DEFAULT: '#ED881E', 50: '#fff7ed', 100: '#ffedd5', 400: '#F5A954', 600: '#d9730f', 700: '#b85a08' },
+            danger: { DEFAULT: '#D64545', dark: '#E06666' },
+            dark: { bg: '#0F1729', card: '#1A2540', border: '#2A3A5C', text: '#E8EDF5', subtext: '#A9B4C8' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --aula-navy:   #172744;
+      --aula-blue:   #044E9C;
+      --aula-green:  #42B77E;
+      --aula-orange: #ED881E;
+      --aula-bg:     #F5F7FB;
+      --aula-card:   #FFFFFF;
+      --aula-danger: #D64545;
+    }
+
+    body {
+      background-color: var(--aula-bg);
+      color: var(--aula-navy);
+      font-size: 18px;
+      line-height: 1.65;
+      font-family: 'Nunito', system-ui, sans-serif;
+    }
+
+    .dark body { background-color: #0F1729; color: #E8EDF5; }
+    
+    .kw { font-weight: 800; color: #044E9C; }
+    .dark .kw { color: #6FA8EA; }
+
+    .read-content p, .read-content li { max-width: 72ch; }
+
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; }
+    .dark ::-webkit-scrollbar-track { background: #1A2540; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+    .btn-touch { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  </style>
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('aulanext_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) { console.warn('Error llegint preferència de tema:', e); }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col pb-24 md:pb-8 selection:bg-orange-100 dark:selection:bg-blue-900 selection:text-orange-700 dark:selection:text-blue-200 transition-colors duration-200">
+
+  <header class="sticky top-0 z-40 bg-white dark:bg-dark-card border-b border-slate-200 dark:border-dark-border shadow-sm transition-colors duration-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3 cursor-pointer select-none" onclick="switchTab('home')">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="text-3xl font-black tracking-tight text-navy dark:text-white transition-colors duration-200">Aula</span>
+            <span class="text-3xl font-black tracking-tight text-blue dark:text-blue-400">Next</span>
+            <div class="w-6 h-6 flex items-center justify-center -ml-1 text-green font-black">
+              <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current" preserveAspectRatio="xMidYMid meet">
+                <path d="M5 19L19 5M19 5H10M19 5V14" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <span class="ml-1 px-2.5 py-0.5 rounded-full text-[13px] font-black text-white bg-orange uppercase tracking-wider shadow-sm">ESO</span>
+          </div>
+          <span data-i18n="header_sub" class="text-[13px] font-bold text-slate-500 dark:text-dark-subtext mt-1">Biologia i Geologia · 1r ESO · Tema 2: La geosfera</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <nav class="hidden md:flex items-center gap-1.5 mr-2">
+          <button id="nav-btn-home" onclick="switchTab('home')" class="btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-blue text-white shadow-sm"><span data-i18n="nav_home">🏠 Inici</span></button>
+          <button id="nav-btn-learn" onclick="switchTab('learn')" class="btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="nav_learn">📖 Aprèn</span></button>
+          <button id="nav-btn-questions" onclick="switchTab('questions')" class="btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="nav_questions">❓ Preguntes</span></button>
+          <button id="nav-btn-practice" onclick="switchTab('practice')" class="btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="nav_practice">🧪 Practica</span></button>
+          <button id="nav-btn-quiz" onclick="switchTab('quiz')" class="btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="nav_quiz">✅ Test</span></button>
+        </nav>
+
+        <button onclick="toggleLanguage()" aria-label="Canviar idioma" class="btn-touch h-11 px-1.5 rounded-2xl bg-slate-100 dark:bg-dark-border border border-slate-200 dark:border-dark-border flex items-center justify-center shadow-sm select-none hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <div id="lang-val" class="px-2 py-1 rounded-lg text-xs font-black bg-white dark:bg-dark-card text-blue dark:text-blue-400 shadow-sm transition-all">VAL</div>
+          <div id="lang-cas" class="px-2 py-1 rounded-lg text-xs font-bold text-slate-400 dark:text-slate-500 transition-all">CAS</div>
+        </button>
+
+        <button id="theme-toggle-btn" onclick="toggleDarkMode()" aria-label="Canviar mode fosc" class="btn-touch w-11 h-11 rounded-2xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center justify-center text-xl shadow-sm border border-slate-200 dark:border-dark-border">
+          <span id="theme-toggle-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-card border-t border-slate-200 dark:border-dark-border shadow-lg px-1 py-1 flex items-center justify-around transition-colors duration-200">
+    <button id="mob-btn-home" onclick="switchTab('home')" class="flex flex-col items-center justify-center p-1.5 text-blue dark:text-blue-400 font-extrabold text-[13px] min-w-[56px] min-h-[44px]"><span class="text-xl">🏠</span><span data-i18n="nav_home_short">Inici</span></button>
+    <button id="mob-btn-learn" onclick="switchTab('learn')" class="flex flex-col items-center justify-center p-1.5 text-slate-500 dark:text-dark-subtext font-extrabold text-[13px] min-w-[56px] min-h-[44px]"><span class="text-xl">📖</span><span data-i18n="nav_learn_short">Aprèn</span></button>
+    <button id="mob-btn-questions" onclick="switchTab('questions')" class="flex flex-col items-center justify-center p-1.5 text-slate-500 dark:text-dark-subtext font-extrabold text-[13px] min-w-[56px] min-h-[44px]"><span class="text-xl">❓</span><span data-i18n="nav_questions_short">Preguntes</span></button>
+    <button id="mob-btn-practice" onclick="switchTab('practice')" class="flex flex-col items-center justify-center p-1.5 text-slate-500 dark:text-dark-subtext font-extrabold text-[13px] min-w-[56px] min-h-[44px]"><span class="text-xl">🧪</span><span data-i18n="nav_practice_short">Practica</span></button>
+    <button id="mob-btn-quiz" onclick="switchTab('quiz')" class="flex flex-col items-center justify-center p-1.5 text-slate-500 dark:text-dark-subtext font-extrabold text-[13px] min-w-[56px] min-h-[44px]"><span class="text-xl">✅</span><span data-i18n="nav_quiz_short">Test</span></button>
+  </nav>
+
+  <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 read-content">
+
+    <div id="tab-home" class="space-y-6">
+      <div class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-8 border-2 border-slate-200/80 dark:border-dark-border shadow-sm space-y-3">
+        <div data-i18n="home_welcome" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 font-bold text-[13px]">👋 Benvinguts a Aula Next ESO</div>
+        <h2 data-i18n="home_title" class="text-[26px] font-black text-navy dark:text-white leading-tight">Hola! Aquí tens tot el tema de la geosfera ordenat.</h2>
+        <p data-i18n="home_subtitle" class="text-slate-600 dark:text-dark-subtext font-semibold text-lg">Segueix els passos:</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div onclick="switchTab('learn')" class="bg-white dark:bg-dark-card rounded-3xl p-6 border-2 border-slate-200 dark:border-dark-border hover:border-blue dark:hover:border-blue-400 transition-all cursor-pointer shadow-sm hover:shadow-md flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 flex items-center justify-center text-2xl font-black shrink-0">1</div>
+          <div class="space-y-1"><span data-i18n="home_step1_badge" class="text-[13px] font-black uppercase tracking-wider text-blue dark:text-blue-400">Pas 1</span><h3 data-i18n="home_step1_title" class="text-[21px] font-black text-navy dark:text-white leading-snug">Aprèn la teoria</h3><p data-i18n="home_step1_desc" class="text-base text-slate-600 dark:text-dark-subtext font-medium leading-relaxed">Llig els 5 apartats amb idees clau, trucs i comprovacions ràpides.</p></div>
+        </div>
+        <div onclick="switchTab('questions')" class="bg-white dark:bg-dark-card rounded-3xl p-6 border-2 border-slate-200 dark:border-dark-border hover:border-orange dark:hover:border-orange-400 transition-all cursor-pointer shadow-sm hover:shadow-md flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-orange-950/60 text-orange dark:text-orange-400 flex items-center justify-center text-2xl font-black shrink-0">2</div>
+          <div class="space-y-1"><span data-i18n="home_step2_badge" class="text-[13px] font-black uppercase tracking-wider text-orange dark:text-orange-400">Pas 2</span><h3 data-i18n="home_step2_title" class="text-[21px] font-black text-navy dark:text-white leading-snug">Estudia les 19 preguntes</h3><p data-i18n="home_step2_desc" class="text-base text-slate-600 dark:text-dark-subtext font-medium leading-relaxed">Utilitza les targetes amb resposta clau i completa per memoritzar.</p></div>
+        </div>
+        <div onclick="switchTab('practice')" class="bg-white dark:bg-dark-card rounded-3xl p-6 border-2 border-slate-200 dark:border-dark-border hover:border-green dark:hover:border-green-400 transition-all cursor-pointer shadow-sm hover:shadow-md flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-950/60 text-green dark:text-green-400 flex items-center justify-center text-2xl font-black shrink-0">3</div>
+          <div class="space-y-1"><span data-i18n="home_step3_badge" class="text-[13px] font-black uppercase tracking-wider text-green dark:text-green-400">Pas 3</span><h3 data-i18n="home_step3_title" class="text-[21px] font-black text-navy dark:text-white leading-snug">Practica l'escala de Mohs i els exercicis</h3><p data-i18n="home_step3_desc" class="text-base text-slate-600 dark:text-dark-subtext font-medium leading-relaxed">Jocs d'ordenar, simulador de ratllat i resolució d'exercicis.</p></div>
+        </div>
+        <div onclick="switchTab('quiz')" class="bg-white dark:bg-dark-card rounded-3xl p-6 border-2 border-slate-200 dark:border-dark-border hover:border-blue dark:hover:border-blue-400 transition-all cursor-pointer shadow-sm hover:shadow-md flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 flex items-center justify-center text-2xl font-black shrink-0">4</div>
+          <div class="space-y-1"><span data-i18n="home_step4_badge" class="text-[13px] font-black uppercase tracking-wider text-blue dark:text-blue-400">Pas 4</span><h3 data-i18n="home_step4_title" class="text-[21px] font-black text-navy dark:text-white leading-snug">Fes el test</h3><p data-i18n="home_step4_desc" class="text-base text-slate-600 dark:text-dark-subtext font-medium leading-relaxed">19 preguntes en ordre aleatori amb correcció immediata.</p></div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-4">
+        <h3 data-i18n="home_prog_title" class="text-[21px] font-black text-navy dark:text-white flex items-center gap-2">📊 El teu progrés d'estudi</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border flex items-center justify-between"><div><span data-i18n="home_prog_q" class="text-[13px] font-bold text-slate-500 dark:text-dark-subtext uppercase">Preguntes apreses</span><p class="text-2xl font-black text-green dark:text-green-400" id="stat-learned-questions">0 / 19</p></div><span class="text-2xl">✅</span></div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border flex items-center justify-between"><div><span data-i18n="home_prog_t" class="text-[13px] font-bold text-slate-500 dark:text-dark-subtext uppercase">Apartats de teoria llegits</span><p class="text-2xl font-black text-blue dark:text-blue-400" id="stat-read-sections">0 / 5</p></div><span class="text-2xl">📖</span></div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border flex items-center justify-between"><div><span data-i18n="home_prog_score" class="text-[13px] font-bold text-slate-500 dark:text-dark-subtext uppercase">Millor nota del test</span><p class="text-2xl font-black text-orange dark:text-orange-400" id="stat-best-score">- / 10</p></div><span class="text-2xl">🏆</span></div>
+        </div>
+        <div class="pt-2 flex justify-end"><button data-i18n="home_reset" onclick="confirmResetProgress()" class="btn-touch px-4 py-2 rounded-xl text-[14px] font-bold text-danger dark:text-danger-dark bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 transition">🗑️ Començar de zero</button></div>
+      </div>
+    </div>
+
+    <div id="tab-learn" class="hidden space-y-6">
+      <div class="bg-white dark:bg-dark-card rounded-3xl p-6 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-3">
+        <span data-i18n="learn_badge" class="px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-wider text-blue dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60">Teoria Fàcil i Explicada</span>
+        <h2 data-i18n="learn_title" class="text-[26px] font-black text-navy dark:text-white">📖 Contingut del Tema en 5 Apartats</h2>
+        <p data-i18n="learn_subtitle" class="text-base text-slate-600 dark:text-dark-subtext font-medium">Fes clic a qualsevol apartat per anar directament o llig-los en ordre:</p>
+        <div class="flex flex-wrap gap-2 pt-2">
+          <a href="#ap-1" data-i18n="learn_toc_1" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">1. La Terra per dins</a>
+          <a href="#ap-2" data-i18n="learn_toc_2" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">2. Els minerals</a>
+          <a href="#ap-3" data-i18n="learn_toc_3" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">3. L'origen de les roques</a>
+          <a href="#ap-4" data-i18n="learn_toc_4" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">4. Utilitat de les roques</a>
+          <a href="#ap-5" data-i18n="learn_toc_5" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">5. Ús responsable</a>
+          <a href="#ap-glossari" data-i18n="learn_toc_g" class="btn-touch px-3.5 py-1.5 rounded-xl text-[14px] font-bold bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-blue hover:text-white transition">📚 Glossari</a>
+        </div>
+      </div>
+
+      <section id="ap-1" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-dark-border">
+          <h3 data-i18n="learn_toc_1" class="text-[26px] font-black text-navy dark:text-white">Apartat 1. La Terra per dins</h3>
+          <div class="flex items-center gap-2"><button id="btn-read-sec-1" onclick="toggleSectionRead(1)" class="btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40"><span data-i18n="btn_mark_read">Marcar com a llegit</span></button></div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-100 dark:border-blue-900 text-blue dark:text-blue-400 font-extrabold text-lg">💡 Idea clau: La Terra té 4 components, i la <strong class="kw">geosfera</strong> (la part de roca) té 3 capes: <strong class="kw">escorça</strong>, <strong class="kw">mantell</strong> i <strong class="kw">nucli</strong>.</div>
+          <div class="space-y-2"><h4 class="font-black text-navy dark:text-white text-[21px]">Els 4 components de la Terra:</h4><ul class="space-y-1.5 text-slate-700 dark:text-dark-subtext pl-2"><li>• <strong class="kw">Geosfera:</strong> la part de roca i metall. Hi vivim damunt.</li><li>• <strong class="kw">Hidrosfera:</strong> tota l'aigua (mars, rius, gel i vapor).</li><li>• <strong class="kw">Atmosfera:</strong> l'aire que envolta la Terra. Ens dona l'oxigen.</li><li>• <strong class="kw">Biosfera:</strong> tots els éssers vius.</li></ul></div>
+          <div class="space-y-2"><h4 class="font-black text-navy dark:text-white text-[21px]">Com es va formar la geosfera:</h4><p class="text-slate-700 dark:text-dark-subtext">Al principi, la Terra era una bola de material fos i molt calent. Quan es va refredar, els materials més pesants, com el <strong class="kw">ferro</strong>, van baixar cap al centre. Els més lleugers es van quedar a fora. Així es van formar les 3 capes.</p></div>
+          <div class="overflow-x-auto pt-2">
+            <table class="w-full text-left text-base border-collapse rounded-xl overflow-hidden">
+              <thead class="bg-navy dark:bg-slate-900 text-white text-[14px] uppercase"><tr><th class="p-3">Capa</th><th class="p-3">On és</th><th class="p-3">Com és</th></tr></thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-dark-border bg-slate-50 dark:bg-dark-bg text-slate-800 dark:text-dark-text">
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Escorça</td><td class="p-3">La capa de fora</td><td class="p-3">Sòlida. <strong class="kw">Escorça continental:</strong> <strong class="kw">50 km</strong>, roques clares (<strong class="kw">granit</strong>). <strong class="kw">Escorça oceànica:</strong> <strong class="kw">12 km</strong>, roques fosques (<strong class="kw">basalt</strong>).</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Mantell</td><td class="p-3">Davall de l'escorça, fins als <strong class="kw">2900 km</strong></td><td class="p-3">La capa més gran. Sòlida però plàstica. Roques: <strong class="kw">peridotites</strong>. De 1000 a 3000 °C.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Nucli</td><td class="p-3">Des dels <strong class="kw">2900 km</strong> fins al centre (<strong class="kw">6371 km</strong>)</td><td class="p-3">De <strong class="kw">ferro</strong>, amb una mica de <strong class="kw">níquel</strong> i sofre. <strong class="kw">Nucli extern:</strong> LÍQUID (3000-5000 °C). <strong class="kw">Nucli intern:</strong> sòlid (5000-6000 °C). El límit o <strong class="kw">discontinuïtat</strong> entre els dos està als <strong class="kw">5150 km</strong>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-100 dark:border-orange-900 text-orange-700 dark:text-orange-400 font-bold">🧠 Truc per recordar: La Terra és com un préssec: la pell és l'escorça, la polpa és el mantell i el pinyol és el nucli.<br>Recorda també: el nucli extern és l'ÚNICA capa líquida.</div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border-2 border-slate-200 dark:border-dark-border space-y-2"><h5 class="font-black text-navy dark:text-white text-base">✔️ Comprova-ho:</h5>
+            <div class="space-y-2 text-base text-slate-700 dark:text-dark-subtext">
+              <div class="flex items-center justify-between gap-2"><span>• Quina és la capa més externa?</span><button data-i18n="learn_show" onclick="toggleAnswer('ans-ap1-1')" class="btn-touch px-3 py-1 rounded-lg text-[14px] font-bold bg-white dark:bg-dark-card border border-slate-300 dark:border-dark-border text-navy dark:text-dark-text">Mostra</button></div><p id="ans-ap1-1" class="hidden text-green dark:text-green-400 font-black pl-3">→ L'escorça.</p>
+              <div class="flex items-center justify-between gap-2"><span>• Quina capa és líquida?</span><button data-i18n="learn_show" onclick="toggleAnswer('ans-ap1-2')" class="btn-touch px-3 py-1 rounded-lg text-[14px] font-bold bg-white dark:bg-dark-card border border-slate-300 dark:border-dark-border text-navy dark:text-dark-text">Mostra</button></div><p id="ans-ap1-2" class="hidden text-green dark:text-green-400 font-black pl-3">→ El nucli extern.</p>
+              <div class="flex items-center justify-between gap-2"><span>• De quin metall està fet sobretot el nucli?</span><button data-i18n="learn_show" onclick="toggleAnswer('ans-ap1-3')" class="btn-touch px-3 py-1 rounded-lg text-[14px] font-bold bg-white dark:bg-dark-card border border-slate-300 dark:border-dark-border text-navy dark:text-dark-text">Mostra</button></div><p id="ans-ap1-3" class="hidden text-green dark:text-green-400 font-black pl-3">→ De ferro.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ap-2" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-dark-border">
+          <h3 data-i18n="learn_toc_2" class="text-[26px] font-black text-navy dark:text-white">Apartat 2. Els minerals</h3>
+          <div class="flex items-center gap-2"><button id="btn-read-sec-2" onclick="toggleSectionRead(2)" class="btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40"><span data-i18n="btn_mark_read">Marcar com a llegit</span></button></div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-100 dark:border-blue-900 text-blue dark:text-blue-400 font-extrabold text-lg">💡 Idea clau: Un <strong class="kw">mineral</strong> és un cos <strong class="kw">sòlid</strong>, <strong class="kw">pur</strong> i <strong class="kw">d'origen natural</strong>, i el podem reconéixer per les seues propietats.</div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Què és un mineral?</h4><p>• És <strong class="kw">sòlid</strong>, és <strong class="kw">pur</strong> (no és una mescla) i és <strong class="kw">d'origen natural</strong> (no el fabriquen les persones).</p><p>• Exemples: <strong class="kw">quars</strong>, <strong class="kw">or</strong>, <strong class="kw">diamant</strong>, calcita.</p></div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Per a què serveixen?</h4><ul class="space-y-1 pl-2"><li>• <strong>Construcció:</strong> guix o algeps. El <strong class="kw">ferro</strong> s'usa en bigues.</li><li>• <strong>Pintures, ceràmica i vidre.</strong></li><li>• <strong>Mòbils:</strong> porten niobi i tàntal, que s'extrauen del <strong class="kw">coltan</strong>.</li><li>• <strong>Joieria:</strong> <strong class="kw">diamant</strong>, safir, <strong class="kw">or</strong>.</li><li>• <strong>Cables elèctrics:</strong> <strong class="kw">coure</strong>, que s'extrau de la cuprita.</li><li>• <strong>Cuina:</strong> ferro (de l'hematites) i alumini (de la bauxita).</li></ul></div>
+          <div class="overflow-x-auto pt-2">
+            <table class="w-full text-left text-base border-collapse rounded-xl overflow-hidden">
+              <thead class="bg-navy dark:bg-slate-900 text-white text-[14px] uppercase"><tr><th class="p-3">Propietat</th><th class="p-3">Què és</th><th class="p-3">Exemple</th></tr></thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-dark-border bg-slate-50 dark:bg-dark-bg text-slate-800 dark:text-dark-text">
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Color</td><td class="p-3">El <strong class="kw">color</strong> que veiem</td><td class="p-3">El cinabri és roig.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Color de la ratlla</td><td class="p-3">El <strong class="kw">color de la ratlla</strong> en pols</td><td class="p-3">L'hematites sempre fa la ratlla roja.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Lluïssor</td><td class="p-3">Com reflecteix la llum</td><td class="p-3">Galena: metàl·lica · Halita: vítria.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Duresa</td><td class="p-3">Si es ratlla amb facilitat o no</td><td class="p-3">El talc és tou i el diamant molt dur.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Hàbit</td><td class="p-3">Forma dels <strong class="kw">cristalls</strong></td><td class="p-3">La pirita forma cubs.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Exfoliació</td><td class="p-3">Si es trenca en trossos similars</td><td class="p-3">La mica es trenca en làmines.</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Tenacitat</td><td class="p-3">Resistència a trencar-se o doblegar-se</td><td class="p-3">Són fràgils si es trenquen fàcilment.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">L'<strong class="kw">escala de Mohs</strong> (de més tou a més dur):</h4><p class="font-semibold text-blue dark:text-blue-400">1 <strong class="kw">Talc</strong> · 2 Guix (algeps) · 3 Calcita · 4 Fluorita · 5 Apatita · 6 Ortosa · 7 <strong class="kw">Quars</strong> · 8 Topazi · 9 Corindó · 10 <strong class="kw">Diamant</strong></p><p class="text-sm text-slate-500 dark:text-dark-subtext">Objectes per a comprovar: ungla 2,5 · moneda 3,5 · clau 4 · vidre 5 · navalla 6 · llima d'acer 7 · paper de vidre 8.</p></div>
+          <div class="p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-100 dark:border-orange-900 text-orange-700 dark:text-orange-400 font-bold">🧠 Truc per recordar: Regla d'or de la duresa: el més dur sempre ratlla el més tou. Si un mineral ratlla el vidre, té una duresa de 6 o més.</div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border-2 border-slate-200 dark:border-dark-border space-y-2"><h5 class="font-black text-navy dark:text-white text-base">✔️ Comprova-ho:</h5>
+            <div class="space-y-2 text-base text-slate-700 dark:text-dark-subtext">
+              <div class="flex items-center justify-between gap-2"><span>• Quin és el mineral més dur?</span><button data-i18n="learn_show" onclick="toggleAnswer('ans-ap2-1')" class="btn-touch px-3 py-1 rounded-lg text-[14px] font-bold bg-white dark:bg-dark-card border border-slate-300 dark:border-dark-border text-navy dark:text-dark-text">Mostra</button></div><p id="ans-ap2-1" class="hidden text-green dark:text-green-400 font-black pl-3">→ El diamant (10).</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ap-3" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-dark-border">
+          <h3 data-i18n="learn_toc_3" class="text-[26px] font-black text-navy dark:text-white">Apartat 3. L'origen de les roques</h3>
+          <div class="flex items-center gap-2"><button id="btn-read-sec-3" onclick="toggleSectionRead(3)" class="btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40"><span data-i18n="btn_mark_read">Marcar com a llegit</span></button></div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-100 dark:border-blue-900 text-blue dark:text-blue-400 font-extrabold text-lg">💡 Idea clau: Les <strong class="kw">roques</strong> són mescles de minerals, i n'hi ha de 3 tipus segons com es formen.</div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Què és una roca?</h4><p>• És una mescla natural de minerals.</p><p>• El <strong class="kw">granit</strong> té 3 minerals: quars, feldespat i mica.</p><p>• La calcària només en té un: la calcita.</p></div>
+          <div class="overflow-x-auto pt-2">
+            <table class="w-full text-left text-base border-collapse rounded-xl overflow-hidden">
+              <thead class="bg-navy dark:bg-slate-900 text-white text-[14px] uppercase"><tr><th class="p-3">Tipus</th><th class="p-3">Com es formen</th><th class="p-3">Exemples</th></tr></thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-dark-border bg-slate-50 dark:bg-dark-bg text-slate-800 dark:text-dark-text">
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400"><strong class="kw">Roques magmàtiques</strong></td><td class="p-3">El <strong class="kw">magma</strong> es refreda. Dins: <strong class="kw">plutòniques</strong>. Fora (<strong class="kw">lava</strong>): <strong class="kw">volcàniques</strong>.</td><td class="p-3 font-semibold">Granit, basalt, pedra tosca</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400"><strong class="kw">Roques sedimentàries</strong></td><td class="p-3"><strong class="kw">Sediments</strong> acumulats i compactats. Poden tindre <strong class="kw">fòssils</strong>.</td><td class="p-3 font-semibold">Gres, argila, calcària</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400"><strong class="kw">Roques metamòrfiques</strong></td><td class="p-3">Transformades per calor i pressió.</td><td class="p-3 font-semibold">Pissarra, quarsita, marbre</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2"><h4 class="font-black text-navy text-[17px] text-center">El cicle de les roques</h4><div id="rock-cycle-svg-container" class="flex justify-center py-2"></div><p class="text-sm text-slate-600 text-center font-semibold">Magmàtica → Sedimentària → Metamòrfica → Magma → Magmàtica</p></div>
+          <div class="p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-100 dark:border-orange-900 text-orange-700 dark:text-orange-400 font-bold">🧠 Truc per recordar: Magmàtica = FOC · Sedimentària = CAPES · Metamòrfica = CANVI.</div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border-2 border-slate-200 dark:border-dark-border space-y-2"><h5 class="font-black text-navy dark:text-white text-base">✔️ Comprova-ho:</h5>
+            <div class="space-y-2 text-base text-slate-700 dark:text-dark-subtext">
+              <div class="flex items-center justify-between gap-2"><span>• Com es diu la roca fosa de l'interior de la Terra?</span><button data-i18n="learn_show" onclick="toggleAnswer('ans-ap3-1')" class="btn-touch px-3 py-1 rounded-lg text-[14px] font-bold bg-white dark:bg-dark-card border border-slate-300 dark:border-dark-border text-navy dark:text-dark-text">Mostra</button></div><p id="ans-ap3-1" class="hidden text-green dark:text-green-400 font-black pl-3">→ Magma.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ap-4" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-dark-border">
+          <h3 data-i18n="learn_toc_4" class="text-[26px] font-black text-navy dark:text-white">Apartat 4. Les roques i la seua utilitat</h3>
+          <div class="flex items-center gap-2"><button id="btn-read-sec-4" onclick="toggleSectionRead(4)" class="btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40"><span data-i18n="btn_mark_read">Marcar com a llegit</span></button></div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-100 dark:border-blue-900 text-blue dark:text-blue-400 font-extrabold text-lg">💡 Idea clau: Usem les roques cada dia per a construir, decorar i obtindre energia.</div>
+          <div class="overflow-x-auto pt-2">
+            <table class="w-full text-left text-base border-collapse rounded-xl overflow-hidden">
+              <thead class="bg-navy dark:bg-slate-900 text-white text-[14px] uppercase"><tr><th class="p-3">Roca</th><th class="p-3">Tipus</th><th class="p-3">Per a què s'usa</th></tr></thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-dark-border bg-slate-50 dark:bg-dark-bg text-slate-800 dark:text-dark-text">
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Gres</td><td class="p-3">Sedimentària</td><td class="p-3">Façanes i paviments</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Granit</td><td class="p-3">Magmàtica</td><td class="p-3">Bancs de cuina</td></tr>
+                <tr><td class="p-3 font-bold text-blue dark:text-blue-400">Pissarra</td><td class="p-3">Metamòrfica</td><td class="p-3">Teulades</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="space-y-2 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Els <strong class="kw">combustibles fòssils</strong>:</h4><p>Són roques sedimentàries fetes amb restes d'éssers vius de fa milions d'anys:</p><ul class="space-y-2 pl-2"><li>• <strong class="kw">Carbó:</strong> es va formar amb restes d'arbres. Tipus: <strong class="kw">torba</strong> → <strong class="kw">lignit</strong> → <strong class="kw">hulla</strong> → <strong class="kw">antracita</strong>.</li><li>• <strong class="kw">Petroli:</strong> l'ÚNICA roca líquida. Es va formar al mar.</li></ul></div>
+        </div>
+      </section>
+
+      <section id="ap-5" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-dark-border">
+          <h3 data-i18n="learn_toc_5" class="text-[26px] font-black text-navy dark:text-white">Apartat 5. L'ús responsable</h3>
+          <div class="flex items-center gap-2"><button id="btn-read-sec-5" onclick="toggleSectionRead(5)" class="btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40"><span data-i18n="btn_mark_read">Marcar com a llegit</span></button></div>
+        </div>
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-100 dark:border-blue-900 text-blue dark:text-blue-400 font-extrabold text-lg">💡 Idea clau: Les mines ens donen recursos, però contaminen i els <strong class="kw">recursos no renovables</strong> s'acaben.</div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Tipus de mines:</h4><ul class="space-y-1 pl-2"><li>• <strong class="kw">Mines a cel obert</strong> i <strong class="kw">subterrànies</strong>.</li><li>• <strong class="kw">Pedreres:</strong> roques grans. <strong class="kw">Graveres:</strong> arena i grava.</li></ul></div>
+          <div class="space-y-1 text-slate-700 dark:text-dark-subtext"><h4 class="font-black text-navy dark:text-white text-[21px]">Mesures per reduir els danys:</h4><p>• <strong class="kw">Preventives</strong> (abans), <strong class="kw">Pal·liatives</strong> (durant) i <strong class="kw">Correctores</strong> (després).</p></div>
+        </div>
+      </section>
+
+      <section id="ap-glossari" class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-4">
+        <h3 data-i18n="learn_toc_g" class="text-[26px] font-black text-navy dark:text-white flex items-center gap-2">📚 Glossari del Tema</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-base">
+          <div class="p-3 bg-slate-50 dark:bg-dark-bg rounded-xl border border-slate-200 dark:border-dark-border"><strong class="kw">Magma:</strong> roca fosa (líquida) de l'interior.</div>
+          <div class="p-3 bg-slate-50 dark:bg-dark-bg rounded-xl border border-slate-200 dark:border-dark-border"><strong class="kw">Mineral:</strong> sòlid, pur i d'origen natural.</div>
+          <div class="p-3 bg-slate-50 dark:bg-dark-bg rounded-xl border border-slate-200 dark:border-dark-border md:col-span-2"><strong class="kw">Sediment:</strong> trossos de roca que arrossega l'aigua o el vent.</div>
+        </div>
+      </section>
+    </div>
+
+    <div id="tab-questions" class="hidden space-y-6">
+      <div class="bg-white dark:bg-dark-card rounded-3xl p-5 border-2 border-slate-200 dark:border-dark-border shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span data-i18n="q_view" class="text-[13px] font-bold uppercase tracking-wider text-slate-500 dark:text-dark-subtext">Vista:</span>
+          <div class="inline-flex rounded-xl bg-slate-100 dark:bg-dark-border p-1 border border-slate-200 dark:border-dark-border">
+            <button id="view-toggle-cards" onclick="setQuestionsSubView('cards')" class="btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all bg-blue text-white shadow-sm"><span data-i18n="q_cards">🃏 Targetes</span></button>
+            <button id="view-toggle-list" onclick="setQuestionsSubView('list')" class="btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="q_list">📑 Llista (1-19)</span></button>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="filterFlashcards('all')" id="filter-all" class="btn-touch px-4 py-1.5 rounded-xl text-[14px] font-black bg-navy text-white"><span data-i18n="q_all">Totes (19)</span></button>
+          <button onclick="filterFlashcards('pending')" id="filter-pending" class="btn-touch px-4 py-1.5 rounded-xl text-[14px] font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="q_pending">A repassar</span></button>
+        </div>
+      </div>
+      <div id="subview-cards" class="w-full max-w-2xl mx-auto flex flex-col items-center">
+        <div class="w-full relative h-[480px] sm:h-[500px] perspective-1000 cursor-pointer" onclick="toggleCardFlip()">
+          <div id="flashcard-inner" class="w-full h-full relative transition-transform duration-500 transform-style-3d shadow-xl rounded-3xl">
+            <div class="absolute inset-0 w-full h-full rounded-3xl bg-white dark:bg-dark-card border-2 border-slate-200 dark:border-dark-border p-6 flex flex-col justify-between backface-hidden shadow-sm">
+              <div class="flex items-center justify-between"><span id="card-front-number" class="px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-wider bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800">Pregunta 1</span><span data-i18n="q_flip_hint" class="text-sm font-bold text-slate-400 dark:text-dark-subtext">Clica per girar 🔄</span></div>
+              <div class="my-auto text-center space-y-3"><p data-i18n="q_exam_q" class="text-[13px] uppercase tracking-widest text-slate-400 dark:text-dark-subtext font-bold">Pregunta d'examen</p><h2 id="card-front-question" class="text-[22px] font-black text-navy dark:text-white leading-snug"></h2><div id="card-front-hint-box" class="inline-block bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 text-base px-4 py-2 rounded-2xl border border-orange-200 dark:border-orange-800 font-bold"><span data-i18n="q_hint">💡 Pista:</span> <span id="card-front-hint"></span></div></div>
+              <div class="flex items-center justify-between text-sm text-slate-400 dark:text-dark-subtext pt-3 border-t border-slate-100 dark:border-dark-border"><span id="card_index_wrapper">Fitxa <span id="card-index-indicator" class="font-mono font-bold text-navy dark:text-white">1</span> <span data-i18n="q_card_of">de</span> <span id="card-total-indicator" class="font-mono">19</span></span><span data-i18n="q_press_space">Premeu [Espai] o clica per veure la resposta</span></div>
+            </div>
+            <div class="absolute inset-0 w-full h-full rounded-3xl bg-gradient-to-b from-white to-blue-50/30 dark:from-dark-card dark:to-dark-bg border-2 border-blue dark:border-blue-400 p-6 flex flex-col justify-between backface-hidden rotate-y-180 shadow-sm overflow-hidden">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-dark-border"><div class="flex items-center gap-2"><span id="card-back-number" class="px-3 py-0.5 rounded-full text-[13px] font-black bg-blue text-white">Resposta P1</span><span id="card-back-category" class="text-sm font-bold text-slate-500 dark:text-dark-subtext"></span></div></div>
+              <div onclick="event.stopPropagation();" class="flex-1 my-2 overflow-y-auto pr-1 flex flex-col gap-3 text-slate-800 dark:text-dark-text">
+                <div class="flex items-center gap-2 pt-1"><button id="btn-ans-short" onclick="setAnswerMode('short')" class="btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-blue text-white shadow-sm"><span data-i18n="q_short_ans">⚡ Resposta clau (curta)</span></button><button id="btn-ans-full" onclick="setAnswerMode('full')" class="btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="q_full_ans">📖 Resposta completa</span></button></div>
+                <div id="card-back-text" class="text-lg leading-relaxed whitespace-pre-line font-medium"></div>
+                <div id="card-back-note-container" class="hidden p-3 bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-2xl text-sm text-orange-800 dark:text-orange-400 font-bold">⚠️ <span id="card-back-note-text"></span></div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 dark:border-dark-border flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2"><button onclick="event.stopPropagation(); markStatus('learned')" class="btn-touch px-3.5 py-1 rounded-xl bg-green text-white text-[14px] font-black hover:bg-green-600 transition"><span data-i18n="q_learned">✓ Ja me la sé</span></button><button onclick="event.stopPropagation(); markStatus('pending')" class="btn-touch px-3.5 py-1 rounded-xl bg-orange-50 dark:bg-orange-950/50 text-orange dark:text-orange-400 border border-orange text-[14px] font-black hover:bg-orange-100 dark:hover:bg-orange-900/50 transition"><span data-i18n="q_to_review">⏳ A repassar</span></button></div>
+                <span data-i18n="q_flip_back" class="text-sm text-slate-400 dark:text-dark-subtext">Gira per tornar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-3 mt-6 w-full max-w-md"><button onclick="prevCard()" class="btn-touch flex-1 px-4 rounded-2xl bg-white dark:bg-dark-card border-2 border-slate-200 dark:border-dark-border text-navy dark:text-dark-text font-black hover:bg-slate-50 dark:hover:bg-dark-border transition shadow-sm"><span data-i18n="q_prev">← Anterior</span></button><button onclick="toggleCardFlip()" class="btn-touch px-6 rounded-2xl bg-blue text-white font-black hover:bg-blue-600 transition shadow-sm"><span data-i18n="q_flip">🔄 Girar</span></button><button onclick="nextCard()" class="btn-touch flex-1 px-4 rounded-2xl bg-white dark:bg-dark-card border-2 border-slate-200 dark:border-dark-border text-navy dark:text-dark-text font-black hover:bg-slate-50 dark:hover:bg-dark-border transition shadow-sm"><span data-i18n="q_next">Següent →</span></button></div>
+      </div>
+      <div id="subview-list" class="hidden space-y-4"><div id="list-container" class="space-y-4"></div></div>
+    </div>
+
+    <div id="tab-practice" class="hidden space-y-6">
+      <div class="bg-white dark:bg-dark-card rounded-3xl p-3 border-2 border-slate-200 dark:border-dark-border shadow-sm flex flex-wrap gap-2">
+        <button id="prac-tab-btn-mohs" onclick="setPracticeSubTab('mohs')" class="btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-blue text-white shadow-sm"><span data-i18n="prac_tab_mohs">🏆 Ordena l'escala de Mohs</span></button>
+        <button id="prac-tab-btn-scratch" onclick="setPracticeSubTab('scratch')" class="btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="prac_tab_scratch">⚔️ Simulador: qui ratlla qui?</span></button>
+        <button id="prac-tab-btn-exercises" onclick="setPracticeSubTab('exercises')" class="btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="prac_tab_ex">📖 Exercicis (38 i 13)</span></button>
+        <button id="prac-tab-btn-mockexam" onclick="setPracticeSubTab('mockexam')" class="btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700"><span data-i18n="prac_tab_mock">⏱️ Simulacre escrit</span></button>
+      </div>
+      <div id="prac-subtab-mohs" class="space-y-5">
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div class="space-y-1"><h3 data-i18n="prac_mohs_title" class="text-[21px] font-black text-navy dark:text-white">🏆 Joc: Col·loca els 10 Minerals de l'Escala de Mohs</h3><p data-i18n="prac_mohs_sub" class="text-sm text-slate-500 dark:text-dark-subtext font-bold">Clica primer sobre un mineral i després clica a la casella (de l'1 al 10):</p></div>
+          <div class="flex items-center gap-2"><button onclick="resetMohsGame()" class="btn-touch px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-dark-border text-[14px] font-black text-navy dark:text-dark-text hover:bg-slate-100 dark:hover:bg-dark-bg"><span data-i18n="prac_reset">🔄 Reiniciar</span></button><button onclick="checkMohsGame()" class="btn-touch px-4 py-1.5 rounded-xl bg-blue text-white text-[14px] font-black hover:bg-blue-600 shadow-sm"><span data-i18n="prac_check">✓ Comprovar Solució</span></button></div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3"><div id="mohs-slots-grid" class="contents"></div></div>
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-3"><div class="flex items-center justify-between"><h4 data-i18n="prac_mohs_avail" class="text-[13px] font-black uppercase tracking-wider text-slate-500 dark:text-dark-subtext">Minerals disponibles per a situar:</h4><span id="mohs-selection-badge" class="text-sm font-bold text-slate-500 dark:text-dark-subtext bg-slate-100 dark:bg-dark-border px-3 py-1 rounded-xl"></span></div><div id="mohs-pool-grid" class="flex flex-wrap gap-2.5 justify-center"></div></div>
+        <div class="bg-white p-4 rounded-3xl border-2 border-slate-200 shadow-sm space-y-2"><h4 data-i18n="prac_mohs_ref" class="text-sm font-black text-navy text-center uppercase tracking-wider">Referència visual de l'escala de Mohs</h4><div id="mohs-svg-reference-container" class="flex justify-center overflow-x-auto"></div></div>
+        <div id="mohs-feedback" class="hidden p-4 rounded-2xl text-base font-bold transition-all"></div>
+      </div>
+      <div id="prac-subtab-scratch" class="hidden space-y-5">
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-2"><h3 data-i18n="prac_scratch_title" class="text-[21px] font-black text-navy dark:text-white">⚔️ Simulador: qui ratlla qui?</h3><p data-i18n="prac_scratch_sub" class="text-sm text-slate-500 dark:text-dark-subtext font-bold">Comprova qui ratlla a qui amb les dureses de referència del llibre de Santillana:</p></div>
+        <div class="flex flex-wrap gap-2"><button onclick="setScratchPreset('p10_vidre')" class="btn-touch px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-[14px] font-black hover:bg-blue-100 dark:hover:bg-blue-900/60">🎯 P10: Mineral 7,5 vs Vidre (5)</button><button onclick="setScratchPreset('p10_quars')" class="btn-touch px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-[14px] font-black hover:bg-blue-100 dark:hover:bg-blue-900/60">🎯 P10: Mineral 7,5 vs Quars (7)</button><button onclick="setScratchPreset('vidre_ortosa')" class="btn-touch px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text text-[14px] font-black hover:bg-slate-200 dark:hover:bg-slate-700">Vidre (5) vs Ortosa (6)</button><button onclick="setScratchPreset('apatita_vidre')" class="btn-touch px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text text-[14px] font-black hover:bg-slate-200 dark:hover:bg-slate-700">⚖️ Apatita (5) vs Vidre (5)</button></div>
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm grid grid-cols-1 md:grid-cols-2 gap-5"><div class="space-y-2"><label data-i18n="prac_scratch_matA" class="block text-[13px] font-black uppercase text-slate-500 dark:text-dark-subtext">Material A (Atacant)</label><select id="scratch-item-a" onchange="runScratchTest()" class="w-full p-3 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-2xl text-base font-bold text-navy dark:text-dark-text outline-none"></select><div id="scratch-desc-a" class="text-sm text-slate-500 dark:text-dark-subtext p-2.5 bg-slate-50 dark:bg-dark-bg rounded-xl"></div></div><div class="space-y-2"><label data-i18n="prac_scratch_matB" class="block text-[13px] font-black uppercase text-slate-500 dark:text-dark-subtext">Material B (Objecte a ratllar)</label><select id="scratch-item-b" onchange="runScratchTest()" class="w-full p-3 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-2xl text-base font-bold text-navy dark:text-dark-text outline-none"></select><div id="scratch-desc-b" class="text-sm text-slate-500 dark:text-dark-subtext p-2.5 bg-slate-50 dark:bg-dark-bg rounded-xl"></div></div></div>
+        <div id="scratch-result-box" class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-blue dark:border-blue-400 shadow-sm space-y-3"><div class="flex items-center gap-3"><span id="scratch-result-icon" class="text-3xl">⚔️</span><div><h4 data-i18n="prac_scratch_res" id="scratch-result-title" class="text-[21px] font-black text-navy dark:text-white">Resultat del test</h4><p id="scratch-result-subtitle" class="text-sm text-slate-500 dark:text-dark-subtext font-bold"></p></div></div><div id="scratch-result-explanation" class="text-base text-slate-700 dark:text-dark-subtext bg-blue-50/50 dark:bg-blue-950/40 p-4 rounded-2xl border border-blue-100 dark:border-blue-900 leading-relaxed font-medium"></div></div>
+      </div>
+      <div id="prac-subtab-exercises" class="hidden space-y-5">
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-dark-border"><h3 class="font-black text-navy dark:text-white text-[21px] flex items-center gap-2"><span>📖</span> Exercici 38 del llibre de text (Santillana)</h3><span class="px-2.5 py-0.5 rounded-full text-[13px] font-black bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400">Llibre</span></div>
+          <div class="space-y-3 text-base">
+            <div class="p-4 bg-slate-50 dark:bg-dark-bg rounded-2xl border border-slate-200 dark:border-dark-border space-y-2"><p class="font-bold text-navy dark:text-white">a) Tres minerals que ratllen el quars i tres que siguen ratllats pel quars.</p><details class="cursor-pointer"><summary class="text-blue dark:text-blue-400 font-black hover:underline"><span data-i18n="learn_show">Mostra</span> la solució</summary><div class="mt-2 pl-3 border-l-4 border-blue bg-white dark:bg-dark-card p-3 rounded-xl font-medium text-slate-700 dark:text-dark-subtext"><strong>Ratllen el quars:</strong> <strong class="kw">topazi</strong>, <strong class="kw">corindó</strong> i <strong class="kw">diamant</strong>.<br><strong>Són ratllats pel quars:</strong> <strong class="kw">talc</strong>, guix i calcita.</div></details></div>
+            <div class="p-4 bg-slate-50 dark:bg-dark-bg rounded-2xl border border-slate-200 dark:border-dark-border space-y-2"><p class="font-bold text-navy dark:text-white">b) Dues companyes dubten si una mostra és calcita o fluorita. Com poden esbrinar-ho?</p><details class="cursor-pointer"><summary class="text-blue dark:text-blue-400 font-black hover:underline"><span data-i18n="learn_show">Mostra</span> la solució</summary><div class="mt-2 pl-3 border-l-4 border-blue bg-white dark:bg-dark-card p-3 rounded-xl font-medium text-slate-700 dark:text-dark-subtext">Ratllant-la amb una <strong>moneda (3,5)</strong>: si la ratlla, és calcita (3); si no la ratlla, és fluorita (4).</div></details></div>
+          </div>
+        </div>
+      </div>
+      <div id="prac-subtab-mockexam" class="hidden space-y-5">
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div><h3 data-i18n="prac_mock_title" class="text-[21px] font-black text-navy dark:text-white">⏱️ Simulacre d'Examen Escrit (10 Preguntes)</h3><p data-i18n="prac_mock_sub" class="text-sm text-slate-500 dark:text-dark-subtext font-bold">Avalua de memòria 10 preguntes triades a l'atzar:</p></div>
+          <div class="flex items-center gap-3"><label class="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border px-3.5 py-1.5 rounded-xl text-[14px] font-black text-navy dark:text-dark-text"><input type="checkbox" id="exam-toggle-hints" onchange="toggleExamHintsDisplay()" class="rounded text-blue"><span data-i18n="prac_mock_hints">Mostrar pistes</span></label><span id="exam-timer" class="font-mono text-base font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text px-3 py-1.5 rounded-xl">00:00</span><button onclick="generateExam()" class="btn-touch px-4 py-1.5 rounded-xl bg-blue text-white text-[14px] font-black hover:bg-blue-600 shadow-sm"><span data-i18n="prac_mock_new">🎲 Nou Examen</span></button></div>
+        </div>
+        <div id="exam-questions-container" class="space-y-4"></div>
+        <div class="bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm flex items-center justify-between gap-4"><span data-i18n="prac_mock_eval" class="text-sm text-slate-500 dark:text-dark-subtext font-bold">Avalua totes les 10 preguntes abans de prémer Concloure:</span><button onclick="finishExam()" class="btn-touch px-5 py-2.5 rounded-2xl bg-green text-white font-black text-base hover:bg-green-600 shadow-md"><span data-i18n="prac_mock_finish">📊 Concloure i Qualificar</span></button></div>
+        <div id="exam-results-card" class="hidden bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-green shadow-md space-y-2"><h4 data-i18n="prac_mock_res" class="text-[21px] font-black text-navy dark:text-white">Resultat del teu simulacre</h4><p id="exam-results-score" class="text-4xl font-black text-green dark:text-green-400"></p><p id="exam-results-feedback" class="text-base text-slate-700 dark:text-dark-subtext"></p></div>
+      </div>
+    </div>
+
+    <div id="tab-quiz" class="hidden space-y-6">
+      <div id="quiz-screen-start" class="bg-white dark:bg-dark-card rounded-3xl p-8 border-2 border-slate-200 dark:border-dark-border shadow-sm text-center max-w-xl mx-auto space-y-4"><span class="text-4xl">📝</span><h3 data-i18n="quiz_start_title" class="text-[26px] font-black text-navy dark:text-white">Test: 19 preguntes</h3><p data-i18n="quiz_start_desc" class="text-base text-slate-600 dark:text-dark-subtext font-semibold leading-relaxed">Respondrem les 19 preguntes en ordre aleatori, una per una. Rebràs correcció immediata i explicació curta per a cada pregunta.</p><div class="pt-2"><button onclick="startQuiz()" class="btn-touch px-6 py-3 rounded-2xl bg-blue text-white font-black text-lg hover:bg-blue-600 shadow-md"><span data-i18n="quiz_start_btn">Començar el Test 🚀</span></button></div></div>
+      <div id="quiz-screen-question" class="hidden max-w-xl mx-auto space-y-5">
+        <div class="bg-white dark:bg-dark-card p-4 rounded-2xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-2"><div class="flex items-center justify-between text-sm font-black text-navy dark:text-white"><span id="quiz-progress-text">Pregunta 1 de 19</span><span id="quiz-score-preview" class="text-blue dark:text-blue-400"></span></div><div class="w-full bg-slate-100 dark:bg-dark-bg rounded-full h-3 overflow-hidden"><div id="quiz-progress-bar" class="bg-blue h-full rounded-full transition-all duration-300" style="width: 5%"></div></div></div>
+        <div class="bg-white dark:bg-dark-card p-6 sm:p-7 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-4"><h3 id="quiz-question-title" class="text-[21px] font-black text-navy dark:text-white leading-snug"></h3><div id="quiz-options-container" class="space-y-3 pt-2"></div><div id="quiz-explanation-box" class="hidden p-4 rounded-2xl border-2 text-base leading-relaxed font-semibold"></div><div id="quiz-next-container" class="hidden pt-2 flex justify-end"><button onclick="nextQuizQuestion()" class="btn-touch px-6 py-2.5 rounded-2xl bg-blue text-white font-black text-base hover:bg-blue-600 shadow-sm"><span data-i18n="quiz_next">Següent →</span></button></div></div>
+      </div>
+      <div id="quiz-screen-results" class="hidden max-w-xl mx-auto space-y-5">
+        <div class="bg-white dark:bg-dark-card p-7 rounded-3xl border-2 border-green shadow-md text-center space-y-3"><span class="text-4xl">🎉</span><h3 data-i18n="quiz_end_title" class="text-[26px] font-black text-navy dark:text-white">Test completat!</h3><p id="quiz-final-score" class="text-5xl font-black text-green dark:text-green-400"></p><p id="quiz-final-summary" class="text-base font-bold text-slate-600 dark:text-dark-subtext"></p><div class="flex flex-wrap items-center justify-center gap-3 pt-3"><button onclick="startQuiz(false)" class="btn-touch px-4 py-2 rounded-2xl bg-blue text-white font-black text-base hover:bg-blue-600 shadow-sm"><span data-i18n="quiz_retry_all">🔄 Repetir el test</span></button><button id="btn-quiz-retry-failed" onclick="startQuiz(true)" class="hidden btn-touch px-4 py-2 rounded-2xl bg-orange text-white font-black text-base hover:bg-orange-600 shadow-sm"><span data-i18n="quiz_retry_failed">🎯 Repetir només les fallades</span></button></div></div>
+        <div id="quiz-failed-list-container" class="hidden bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-red-200 dark:border-red-900 shadow-sm space-y-3"><h4 data-i18n="quiz_failed_title" class="font-black text-danger dark:text-danger-dark text-[18px]">❌ Preguntes que cal repassar:</h4><div id="quiz-failed-items" class="space-y-3 text-base"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-auto border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-card py-4 transition-colors duration-200">
+    <div data-i18n="footer_text" class="max-w-6xl mx-auto px-4 text-center text-sm font-bold text-slate-500 dark:text-dark-subtext">Material d'estudi d'Aula Next ESO. Fes-lo servir junt amb el llibre de text (Unitat 2).</div>
+  </footer>
+
+  <div id="toast" class="fixed bottom-24 md:bottom-8 right-6 bg-navy text-white px-5 py-3.5 rounded-2xl shadow-xl text-sm font-extrabold transform translate-y-28 opacity-0 transition-all duration-300 pointer-events-none z-50">Notificació</div>
+
+  <script>
+    const I18N = {
+      va: {
+        nav_home: "🏠 Inici", nav_learn: "📖 Aprèn", nav_questions: "❓ Preguntes", nav_practice: "🧪 Practica", nav_quiz: "✅ Test",
+        nav_home_short: "Inici", nav_learn_short: "Aprèn", nav_questions_short: "Preguntes", nav_practice_short: "Practica", nav_quiz_short: "Test",
+        header_sub: "Biologia i Geologia · 1r ESO · Tema 2: La geosfera",
+        home_welcome: "👋 Benvinguts a Aula Next ESO",
+        home_title: "Hola! Aquí tens tot el tema de la geosfera ordenat.", home_subtitle: "Segueix els passos:",
+        home_step1_badge: "Pas 1", home_step1_title: "Aprèn la teoria", home_step1_desc: "Llig els 5 apartats amb idees clau, trucs i comprovacions ràpides.",
+        home_step2_badge: "Pas 2", home_step2_title: "Estudia les 19 preguntes", home_step2_desc: "Utilitza les targetes amb resposta clau i completa per memoritzar.",
+        home_step3_badge: "Pas 3", home_step3_title: "Practica l'escala de Mohs i els exercicis", home_step3_desc: "Jocs d'ordenar, simulador de ratllat i resolució d'exercicis.",
+        home_step4_badge: "Pas 4", home_step4_title: "Fes el test", home_step4_desc: "19 preguntes en ordre aleatori amb correcció immediata.",
+        home_prog_title: "📊 El teu progrés d'estudi", home_prog_q: "Preguntes apreses", home_prog_t: "Apartats de teoria llegits", home_prog_score: "Millor nota del test",
+        home_reset: "🗑️ Començar de zero",
+        learn_badge: "Teoria Fàcil i Explicada", learn_title: "📖 Contingut del Tema en 5 Apartats", learn_subtitle: "Fes clic a qualsevol apartat per anar directament o llig-los en ordre:",
+        learn_toc_1: "1. La Terra per dins", learn_toc_2: "2. Els minerals", learn_toc_3: "3. L'origen de les roques", learn_toc_4: "4. Utilitat de les roques", learn_toc_5: "5. Ús responsable", learn_toc_g: "📚 Glossari", learn_show: "Mostra",
+        q_view: "Vista:", q_cards: "🃏 Targetes", q_list: "📑 Llista (1-19)", q_all: "Totes (19)", q_pending: "A repassar", q_flip_hint: "Clica per girar 🔄", q_exam_q: "Pregunta d'examen", q_hint: "💡 Pista:", q_card_of: "de", q_press_space: "Premeu [Espai] o clica per veure la resposta", q_short_ans: "⚡ Resposta clau (curta)", q_full_ans: "📖 Resposta completa", q_learned: "✓ Ja me la sé", q_to_review: "⏳ A repassar", q_flip_back: "Gira per tornar", q_prev: "← Anterior", q_flip: "🔄 Girar", q_next: "Següent →",
+        prac_tab_mohs: "🏆 Ordena l'escala de Mohs", prac_tab_scratch: "⚔️ Simulador: qui ratlla qui?", prac_tab_ex: "📖 Exercicis (38 i 13)", prac_tab_mock: "⏱️ Simulacre escrit",
+        prac_mohs_title: "🏆 Joc: Col·loca els 10 Minerals de l'Escala de Mohs", prac_mohs_sub: "Clica primer sobre un mineral i després clica a la casella (de l'1 al 10):", prac_reset: "🔄 Reiniciar", prac_check: "✓ Comprovar Solució", prac_mohs_avail: "Minerals disponibles per a situar:", prac_mohs_ref: "Referència visual de l'escala de Mohs",
+        prac_scratch_title: "⚔️ Simulador: qui ratlla qui?", prac_scratch_sub: "Comprova qui ratlla a qui amb les dureses de referència del llibre de Santillana:", prac_scratch_matA: "Material A (Atacant)", prac_scratch_matB: "Material B (Objecte a ratllar)", prac_scratch_res: "Resultat del test",
+        prac_mock_title: "⏱️ Simulacre d'Examen Escrit (10 Preguntes)", prac_mock_sub: "Avalua de memòria 10 preguntes triades a l'atzar:", prac_mock_hints: "Mostrar pistes", prac_mock_new: "🎲 Nou Examen", prac_mock_eval: "Avalua totes les 10 preguntes abans de prémer Concloure:", prac_mock_finish: "📊 Concloure i Qualificar", prac_mock_res: "Resultat del teu simulacre",
+        quiz_start_title: "Test: 19 preguntes", quiz_start_desc: "Respondrem les 19 preguntes en ordre aleatori, una per una. Rebràs correcció immediata i explicació curta per a cada pregunta.", quiz_start_btn: "Començar el Test 🚀", quiz_next: "Següent →", quiz_end_title: "Test completat!", quiz_retry_all: "🔄 Repetir el test", quiz_retry_failed: "🎯 Repetir només les fallades", quiz_failed_title: "❌ Preguntes que cal repassar:",
+        footer_text: "Material d'estudi d'Aula Next ESO. Fes-lo servir junt amb el llibre de text (Unitat 2).",
+        toast_dark: "🌙 Mode fosc activat", toast_light: "☀️ Mode clar activat", toast_reset: "Progrés reiniciat amb èxit!", toast_sec_pend: "Apartat {n} marcat com a pendent", toast_sec_comp: "✓ Apartat {n} completat!", toast_learned: "✓ Marcada com a apresa!", toast_review: "⏳ Afegida a la llista de repàs!", toast_eval_all: "Avalua totes les preguntes abans de qualificar",
+        modal_reset_title: "Vols esborrar tot el progrés?", modal_reset_desc: "Es reiniciaran les preguntes apreses, els apartats llegits i la millor nota del test.", modal_reset_cancel: "Cancel·la", modal_reset_ok: "Sí, esborra",
+        btn_read: "✓ Llegit", btn_mark_read: "Marcar com a llegit",
+        card_none: "Cap fitxa", card_none_desc: "No hi ha fitxes amb el filtre actual.", card_q_num: "Pregunta {n}", card_ans_num: "Resposta P{n}",
+        list_prac: "Practica 🎯", list_ans_key: "⚡ Resposta clau:", list_ans_show: "Mostra resposta completa",
+        mohs_empty: "Buit", mohs_click_put: "Clica per posar", mohs_click_remove: "Clica per levar", mohs_all_placed: "Tots els 10 minerals han sigut col·locats! Prem 'Comprovar Solució'.", mohs_sel_none: "Cap mineral seleccionat", mohs_sel: "Seleccionat: {n} (Tria casella 1-10)",
+        mohs_fb_ok: "🎉 <strong>Excel·lent! 10 de 10 encerts!</strong> Has ordenat perfectament l'Escala de Mohs: 1 Talc, 2 Guix (algeps), 3 Calcita, 4 Fluorita, 5 Apatita, 6 Ortosa, 7 Quars, 8 Topazi, 9 Corindó i 10 Diamant.", mohs_fb_bad: "⚠️ Has encertat <strong>{n} de 10</strong> posicions. Recorda el truc: <em>Talc (1) i Guix (2) són els més tous, el Vidre té duresa 5, i el Diamant (10) és el més dur!</em>",
+        scratch_eq_title: "Tenen exactament la mateixa duresa", scratch_eq_desc: "Dos materials amb la mateixa duresa (<strong>{n}</strong>) no es ratllen amb facilitat entre ells.", scratch_yes_title: "Sí! {a} RATLLA a {b}", scratch_yes_sub: "Duresa {ha} > {hb}", scratch_yes_desc: "Segons la regla de l'escala de Mohs: <strong>El cos més dur sempre ratlla al que té un número menor</strong>.<br>Com que <strong>{a}</strong> té duresa <strong>{ha}</strong> i <strong>{b}</strong> té <strong>{hb}</strong>, el primer deixarà marca en el segon.", scratch_no_title: "No! {a} NO pot ratllar a {b}", scratch_no_sub: "Duresa {ha} < {hb}", scratch_no_desc: "Un mineral és ratllat per tots els que són més durs que ell.<br>Com que <strong>{a}</strong> ({ha}) és menor que <strong>{b}</strong> ({hb}), rellissarà sense danyar-lo. De fet, <strong>{b}</strong> és qui ratlla a <strong>{a}</strong>!",
+        mock_q_of: "Pregunta {n} de 10", mock_check: "👁️ Comprova amb la solució", mock_eval_title: "Autoavalua't:", mock_eval_good: "Bé (+1 pto)", mock_eval_mid: "Mitja (+0,5)", mock_eval_bad: "A millorar (0)",
+        mock_fb_9: "🌟 <strong>Molt bé!</strong> Tens el tema dominat per a l'examen.", mock_fb_5: "👍 <strong>Aprovat!</strong> Bon nivell, però repassa les que has fallat.", mock_fb_0: "📚 <strong>Cal estudiar més!</strong> Torna a llegir l'apartat 'Aprèn' i practica les targetes.",
+        quiz_q_of: "Pregunta {n} de {t}", quiz_hits: "Encerts: {n}", quiz_fb_ok: "✅ <strong>Correcte!</strong> ", quiz_fb_bad: "❌ <strong>No és correcte.</strong> ", quiz_sum_full: "Has encertat {h} de {t} preguntes ({p}%).", quiz_sum_retry: "Repàs de fallades: has encertat {h} de {t}.", quiz_fail_opt: "La teua opció: {o}", quiz_fail_cor: "Solució correcta: {c}"
+      },
+      es: {
+        nav_home: "🏠 Inicio", nav_learn: "📖 Aprende", nav_questions: "❓ Preguntas", nav_practice: "🧪 Practica", nav_quiz: "✅ Test",
+        nav_home_short: "Inicio", nav_learn_short: "Aprende", nav_questions_short: "Preguntas", nav_practice_short: "Practica", nav_quiz_short: "Test",
+        header_sub: "Biología y Geología · 1º ESO · Tema 2: La geosfera",
+        home_welcome: "👋 Bienvenidos a Aula Next ESO",
+        home_title: "¡Hola! Aquí tienes todo el tema de la geosfera ordenado.", home_subtitle: "Sigue los pasos:",
+        home_step1_badge: "Paso 1", home_step1_title: "Aprende la teoría", home_step1_desc: "Lee los 5 apartados con ideas clave, trucos y comprobaciones rápidas.",
+        home_step2_badge: "Paso 2", home_step2_title: "Estudia las 19 preguntas", home_step2_desc: "Utiliza las tarjetas con respuesta clave y completa para memorizar.",
+        home_step3_badge: "Paso 3", home_step3_title: "Practica la escala de Mohs y los ejercicios", home_step3_desc: "Juegos de ordenar, simulador de rayado y resolución de ejercicios.",
+        home_step4_badge: "Paso 4", home_step4_title: "Haz el test", home_step4_desc: "19 preguntas en orden aleatorio con corrección inmediata.",
+        home_prog_title: "📊 Tu progreso de estudio", home_prog_q: "Preguntas aprendidas", home_prog_t: "Apartados de teoría leídos", home_prog_score: "Mejor nota del test",
+        home_reset: "🗑️ Empezar de cero",
+        learn_badge: "Teoría Fácil y Explicada", learn_title: "📖 Contenido del Tema en 5 Apartados", learn_subtitle: "Haz clic en cualquier apartado para ir directamente o léelos en orden:",
+        learn_toc_1: "1. La Tierra por dentro", learn_toc_2: "2. Los minerales", learn_toc_3: "3. El origen de las rocas", learn_toc_4: "4. Utilidad de las rocas", learn_toc_5: "5. Uso responsable", learn_toc_g: "📚 Glosario", learn_show: "Mostrar",
+        q_view: "Vista:", q_cards: "🃏 Tarjetas", q_list: "📑 Lista (1-19)", q_all: "Todas (19)", q_pending: "A repasar", q_flip_hint: "Clica para girar 🔄", q_exam_q: "Pregunta de examen", q_hint: "💡 Pista:", q_card_of: "de", q_press_space: "Pulsa [Espacio] o clica para ver la respuesta", q_short_ans: "⚡ Respuesta clave (corta)", q_full_ans: "📖 Respuesta completa", q_learned: "✓ Ya me la sé", q_to_review: "⏳ A repasar", q_flip_back: "Gira para volver", q_prev: "← Anterior", q_flip: "🔄 Girar", q_next: "Siguiente →",
+        prac_tab_mohs: "🏆 Ordena la escala de Mohs", prac_tab_scratch: "⚔️ Simulador: ¿quién raya a quién?", prac_tab_ex: "📖 Ejercicios (38 y 13)", prac_tab_mock: "⏱️ Simulacro escrito",
+        prac_mohs_title: "🏆 Juego: Coloca los 10 Minerales de la Escala de Mohs", prac_mohs_sub: "Clica primero en un mineral y luego en la casilla (del 1 al 10):", prac_reset: "🔄 Reiniciar", prac_check: "✓ Comprobar Solución", prac_mohs_avail: "Minerales disponibles para situar:", prac_mohs_ref: "Referencia visual de la escala de Mohs",
+        prac_scratch_title: "⚔️ Simulador: ¿quién raya a quién?", prac_scratch_sub: "Comprueba quién raya a quién con las durezas de referencia del libro de Santillana:", prac_scratch_matA: "Material A (Atacante)", prac_scratch_matB: "Material B (Objeto a rayar)", prac_scratch_res: "Resultado del test",
+        prac_mock_title: "⏱️ Simulacro de Examen Escrito (10 Preguntas)", prac_mock_sub: "Evalúa de memoria 10 preguntas elegidas al azar:", prac_mock_hints: "Mostrar pistas", prac_mock_new: "🎲 Nuevo Examen", prac_mock_eval: "Evalúa todas las 10 preguntas antes de pulsar Concluir:", prac_mock_finish: "📊 Concluir y Calificar", prac_mock_res: "Resultado de tu simulacro",
+        quiz_start_title: "Test: 19 preguntas", quiz_start_desc: "Responderemos las 19 preguntas en orden aleatorio, una a una. Recibirás corrección inmediata y explicación corta para cada pregunta.", quiz_start_btn: "Comenzar el Test 🚀", quiz_next: "Siguiente →", quiz_end_title: "¡Test completado!", quiz_retry_all: "🔄 Repetir el test", quiz_retry_failed: "🎯 Repetir solo los fallos", quiz_failed_title: "❌ Preguntas que debes repasar:",
+        footer_text: "Material de estudio de Aula Next ESO. Úsalo junto con el libro de texto (Unidad 2).",
+        toast_dark: "🌙 Modo oscuro activado", toast_light: "☀️ Modo claro activado", toast_reset: "¡Progreso reiniciado con éxito!", toast_sec_pend: "Apartado {n} marcado como pendiente", toast_sec_comp: "✓ ¡Apartado {n} completado!", toast_learned: "✓ ¡Marcada como aprendida!", toast_review: "⏳ ¡Añadida a la lista de repaso!", toast_eval_all: "Evalúa todas las preguntas antes de calificar",
+        modal_reset_title: "¿Quieres borrar todo el progreso?", modal_reset_desc: "Se reiniciarán las preguntas aprendidas, los apartados leídos y la mejor nota del test.", modal_reset_cancel: "Cancelar", modal_reset_ok: "Sí, borrar",
+        btn_read: "✓ Leído", btn_mark_read: "Marcar como leído",
+        card_none: "Ninguna ficha", card_none_desc: "No hay fichas con el filtro actual.", card_q_num: "Pregunta {n}", card_ans_num: "Respuesta P{n}",
+        list_prac: "Practica 🎯", list_ans_key: "⚡ Respuesta clave:", list_ans_show: "Mostrar respuesta completa",
+        mohs_empty: "Vacío", mohs_click_put: "Clica para poner", mohs_click_remove: "Clica para quitar", mohs_all_placed: "¡Todos los 10 minerales han sido colocados! Pulsa 'Comprobar Solución'.", mohs_sel_none: "Ningún mineral seleccionado", mohs_sel: "Seleccionado: {n} (Elige casilla 1-10)",
+        mohs_fb_ok: "🎉 <strong>¡Excelente! ¡10 de 10 aciertos!</strong> Has ordenado perfectamente la Escala de Mohs: 1 Talco, 2 Yeso, 3 Calcita, 4 Fluorita, 5 Apatita, 6 Ortosa, 7 Cuarzo, 8 Topacio, 9 Corindón y 10 Diamante.", mohs_fb_bad: "⚠️ Has acertado <strong>{n} de 10</strong> posiciones. Recuerda el truco: <em>Talco (1) y Yeso (2) son los más blandos, el Vidrio tiene dureza 5, ¡y el Diamante (10) es el más duro!</em>",
+        scratch_eq_title: "Tienen exactamente la misma dureza", scratch_eq_desc: "Dos materiales con la misma dureza (<strong>{n}</strong>) no se rayan con facilidad entre ellos.", scratch_yes_title: "¡Sí! {a} RAYA a {b}", scratch_yes_sub: "Dureza {ha} > {hb}", scratch_yes_desc: "Según la regla de la escala de Mohs: <strong>El cuerpo más duro siempre raya al que tiene un número menor</strong>.<br>Como <strong>{a}</strong> tiene dureza <strong>{ha}</strong> y <strong>{b}</strong> tiene <strong>{hb}</strong>, el primer dejará marca en el segundo.", scratch_no_title: "¡No! {a} NO puede rayar a {b}", scratch_no_sub: "Dureza {ha} < {hb}", scratch_no_desc: "Un mineral es rayado por todos los que son más duros que él.<br>Como <strong>{a}</strong> ({ha}) es menor que <strong>{b}</strong> ({hb}), resbalará sin dañarlo. De hecho, ¡<strong>{b}</strong> es quien raya a <strong>{a}</strong>!",
+        mock_q_of: "Pregunta {n} de 10", mock_check: "👁️ Comprueba con la solución", mock_eval_title: "Autoevalúate:", mock_eval_good: "Bien (+1 pto)", mock_eval_mid: "Media (+0,5)", mock_eval_bad: "A mejorar (0)",
+        mock_fb_9: "🌟 <strong>¡Muy bien!</strong> Tienes el tema dominado para el examen.", mock_fb_5: "👍 <strong>¡Aprobado!</strong> Buen nivel, pero repasa las que has fallado.", mock_fb_0: "📚 <strong>¡Hay que estudiar más!</strong> Vuelve a leer el apartado 'Aprende' y practica las tarjetas.",
+        quiz_q_of: "Pregunta {n} de {t}", quiz_hits: "Aciertos: {n}", quiz_fb_ok: "✅ <strong>¡Correcto!</strong> ", quiz_fb_bad: "❌ <strong>No es correcto.</strong> ", quiz_sum_full: "Has acertado {h} de {t} preguntas ({p}%).", quiz_sum_retry: "Repaso de fallos: has acertado {h} de {t}.", quiz_fail_opt: "Tu opción: {o}", quiz_fail_cor: "Solución correcta: {c}"
+      }
+    };
+
+    let currentLang = localStorage.getItem('aulanext_lang') || 'va';
+
+    function t(key, params = {}) {
+      let str = I18N[currentLang][key] || key;
+      for (const [k, v] of Object.entries(params)) { str = str.replace(`{${k}}`, v); }
+      return str;
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'va' ? 'es' : 'va';
+      try { localStorage.setItem('aulanext_lang', currentLang); } catch (e) {}
+      applyTranslations();
+    }
+
+    function applyTranslations() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[currentLang][key]) el.innerHTML = I18N[currentLang][key];
+      });
+      const valDiv = document.getElementById('lang-val');
+      const casDiv = document.getElementById('lang-cas');
+      if (currentLang === 'va') {
+        valDiv.className = "px-2 py-1 rounded-lg text-xs font-black bg-white dark:bg-dark-card text-blue dark:text-blue-400 shadow-sm transition-all";
+        casDiv.className = "px-2 py-1 rounded-lg text-xs font-bold text-slate-400 dark:text-slate-500 transition-all";
+      } else {
+        casDiv.className = "px-2 py-1 rounded-lg text-xs font-black bg-white dark:bg-dark-card text-blue dark:text-blue-400 shadow-sm transition-all";
+        valDiv.className = "px-2 py-1 rounded-lg text-xs font-bold text-slate-400 dark:text-slate-500 transition-all";
+      }
+      updateReadSectionsUI(); renderCurrentCard(); renderDirectoryList(); renderMohsSlots(); renderMohsPool();
+    }
+
+    let svgCounter = 0;
+    function uniqueSvg(svg) {
+      const suffix = '_' + (++svgCounter);
+      return svg.replace(/id="([^"]+)"/g, (m, id) => `id="${id}${suffix}"`).replace(/url\(#([^)]+)\)/g, (m, id) => `url(#${id}${suffix})`).replace(/href="#([^"]+)"/g, (m, id) => `href="#${id}${suffix}"`);
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    }
+
+    const SVG_DIAGRAMS = {
+      rockCycle: `<svg viewBox="0 0 360 220" class="w-full max-w-[360px] h-48 select-none font-sans"><defs><marker id="arr1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#044E9C" /></marker></defs><rect x="120" y="10" width="120" height="36" rx="10" fill="#044E9C" /><text x="180" y="33" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Magmàtica</text><rect x="230" y="110" width="120" height="36" rx="10" fill="#ED881E" /><text x="290" y="133" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Sedimentària</text><rect x="10" y="110" width="120" height="36" rx="10" fill="#42B77E" /><text x="70" y="133" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Metamòrfica</text><ellipse cx="180" cy="185" rx="55" ry="22" fill="#172744" /><text x="180" y="190" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">Magma (fos)</text><path d="M 230 40 Q 280 60 280 105" fill="none" stroke="#044E9C" stroke-width="2.5" marker-end="url(#arr1)" /><text x="285" y="70" fill="#044E9C" font-size="9" font-weight="bold">es desgasta</text><path d="M 240 145 Q 180 170 120 145" fill="none" stroke="#044E9C" stroke-width="2.5" marker-end="url(#arr1)" /><text x="180" y="152" fill="#044E9C" font-size="9" font-weight="bold" text-anchor="middle">calor i pressió</text><path d="M 70 145 Q 90 190 125 188" fill="none" stroke="#044E9C" stroke-width="2.5" marker-end="url(#arr1)" /><text x="60" y="175" fill="#044E9C" font-size="9" font-weight="bold">es fon</text><path d="M 180 163 L 180 50" fill="none" stroke="#044E9C" stroke-width="2.5" marker-end="url(#arr1)" /><text x="188" y="90" fill="#044E9C" font-size="9" font-weight="bold">es refreda</text></svg>`,
+      mohsScale: `<svg viewBox="0 0 330 190" class="w-full max-w-[330px] h-40 select-none font-sans"><defs><linearGradient id="mohsG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#42B77E" /><stop offset="50%" stop-color="#ED881E" /><stop offset="100%" stop-color="#044E9C" /></linearGradient></defs><rect x="15" y="45" width="300" height="16" fill="url(#mohsG)" rx="8" /><text x="165" y="36" fill="#172744" font-size="8" font-weight="bold" text-anchor="middle">AUGMENT DE LA DURESA (1 → 10)</text><text x="24" y="74" fill="#42B77E" font-size="7" font-weight="bold">1 Talc</text><text x="52" y="74" fill="#42B77E" font-size="7">2 Guix</text><text x="82" y="74" fill="#ED881E" font-size="7">3 Calcita</text><text x="114" y="74" fill="#ED881E" font-size="7">4 Fluorita</text><text x="144" y="74" fill="#ED881E" font-size="7">5 Apatita</text><text x="176" y="74" fill="#044E9C" font-size="7" font-weight="bold">6 Ortosa</text><text x="206" y="74" fill="#044E9C" font-size="7" font-weight="bold">7 Quars</text><text x="236" y="74" fill="#044E9C" font-size="7" font-weight="bold">8 Topazi</text><text x="268" y="74" fill="#172744" font-size="7" font-weight="bold">9 Corindó</text><text x="296" y="74" fill="#172744" font-size="7" font-weight="bold">10 Diamant</text><line x1="39" y1="45" x2="39" y2="20" stroke="#42B77E" stroke-width="1"/><text x="39" y="16" fill="#42B77E" font-size="6" font-weight="bold" text-anchor="middle">Ungla 2,5</text><line x1="68" y1="45" x2="68" y2="20" stroke="#ED881E" stroke-width="1"/><text x="68" y="16" fill="#ED881E" font-size="6" font-weight="bold" text-anchor="middle">Moneda 3,5</text><line x1="116" y1="45" x2="116" y2="20" stroke="#ED881E" stroke-width="1"/><text x="116" y="16" fill="#ED881E" font-size="6" font-weight="bold" text-anchor="middle">Clau 4</text><line x1="146" y1="45" x2="146" y2="20" stroke="#044E9C" stroke-width="1"/><text x="146" y="16" fill="#044E9C" font-size="6" font-weight="bold" text-anchor="middle">Vidre 5</text><line x1="178" y1="45" x2="178" y2="20" stroke="#044E9C" stroke-width="1"/><text x="178" y="16" fill="#044E9C" font-size="6" font-weight="bold" text-anchor="middle">Navalla 6</text><line x1="208" y1="45" x2="208" y2="20" stroke="#044E9C" stroke-width="1"/><text x="208" y="16" fill="#044E9C" font-size="6" font-weight="bold" text-anchor="middle">Llima 7</text><line x1="238" y1="45" x2="238" y2="20" stroke="#172744" stroke-width="1"/><text x="238" y="16" fill="#172744" font-size="6" font-weight="bold" text-anchor="middle">Paper vidre 8</text><rect x="15" y="92" width="300" height="42" rx="6" fill="#f8fafc" stroke="#cbd5e1"/><text x="165" y="105" fill="#172744" font-size="7" font-weight="bold" text-anchor="middle">Dureses de referència del llibre (Santillana):</text><text x="165" y="117" fill="#172744" font-size="6.5" text-anchor="middle">Ungla 2,5 · Moneda 3,5 · Clau 4 · Vidre 5 · Navalla 6 · Llima d'acer 7 · Paper de vidre 8</text><text x="165" y="127" fill="#044E9C" font-size="6.5" font-weight="bold" text-anchor="middle">Mineral 7,5: Ratlla 1..7 (inclòs Quars i Vidre) · Ratllat per 8, 9, 10</text></svg>`
+    };
+
+    const MOHS_OFFICIAL = [{num: 1, name: "Talc", desc: "Molt tou"}, {num: 2, name: "Guix (algeps)", desc: "Es ratlla amb l'ungla"}, {num: 3, name: "Calcita", desc: "Es ratlla amb moneda"}, {num: 4, name: "Fluorita", desc: "Es ratlla amb el vidre"}, {num: 5, name: "Apatita", desc: "Mateixa duresa que el vidre"}, {num: 6, name: "Ortosa", desc: "Ratlla el vidre"}, {num: 7, name: "Quars", desc: "Ratlla el vidre i navalla"}, {num: 8, name: "Topazi", desc: "Ratlla el quars"}, {num: 9, name: "Corindó", desc: "Safir i robí"}, {num: 10, name: "Diamant", desc: "Més dur"}];
+    
+    const SCRATCH_ITEMS = [
+      {id:"talc",name:"Talc (Mineral)",hardness:1.0,desc:"Duresa 1. El més tou."}, {id:"guix",name:"Guix (algeps) (Mineral)",hardness:2.0,desc:"Duresa 2."}, {id:"ungla",name:"Ungla humana (Referència)",hardness:2.5,desc:"Duresa 2,5."}, {id:"calcita",name:"Calcita (Mineral)",hardness:3.0,desc:"Duresa 3."}, {id:"coure",name:"Moneda de coure (Referència)",hardness:3.5,desc:"Duresa 3,5."}, {id:"clau",name:"Clau (Referència)",hardness:4.0,desc:"Duresa 4."}, {id:"fluorita",name:"Fluorita (Mineral)",hardness:4.0,desc:"Duresa 4."}, {id:"apatita",name:"Apatita (Mineral)",hardness:5.0,desc:"Duresa 5."}, {id:"vidre",name:"Vidre (Referència)",hardness:5.0,desc:"Duresa 5."}, {id:"navalla",name:"Navalla d'acer (Referència)",hardness:6.0,desc:"Duresa 6."}, {id:"ortosa",name:"Ortosa (Mineral)",hardness:6.0,desc:"Duresa 6."}, {id:"llima",name:"Llima d'acer (Referència)",hardness:7.0,desc:"Duresa 7."}, {id:"quars",name:"Quars (Mineral)",hardness:7.0,desc:"Duresa 7."}, {id:"turmalina",name:"Mineral 7,5 (Turmalina)",hardness:7.5,desc:"Duresa 7,5."}, {id:"topazi",name:"Topazi (Mineral)",hardness:8.0,desc:"Duresa 8."}, {id:"papervidre",name:"Paper de vidre (Referència)",hardness:8.0,desc:"Duresa 8."}, {id:"corindo",name:"Corindó (Mineral)",hardness:9.0,desc:"Duresa 9."}, {id:"diamant",name:"Diamant (Mineral)",hardness:10.0,desc:"Duresa 10."}
+    ];
+
+    const FLASHCARDS = [
+      {qNum: 1, category: "Components de la Terra", question: "1. Quins són els components de la Terra? Explica'ls i fes el dibuix.", shortAnswer: "<strong class=\"kw\">Geosfera</strong>, <strong class=\"kw\">hidrosfera</strong>, <strong class=\"kw\">atmosfera</strong> i <strong class=\"kw\">biosfera</strong>.", hint: "Roca, aigua, aire i éssers vius.", answer: "<strong class=\"kw\">Geosfera</strong>: part rocosa i metàl·lica on vivim.\n<strong class=\"kw\">Hidrosfera</strong>: aigua de la superfície (líquida, gel, vapor).\n<strong class=\"kw\">Atmosfera</strong>: capa d'aire que envolta el planeta.\n<strong class=\"kw\">Biosfera</strong>: conjunt d'éssers vius.\n\n✏️ Dibuix: El paisatge amb terra, mar, núvols i un cercle que agafa part de totes tres amb éssers vius." },
+      {qNum: 2, category: "Capes de la Geosfera", question: "2. Quines són les capes de la geosfera? Fes el dibuix.", shortAnswer: "<strong class=\"kw\">Escorça</strong>, <strong class=\"kw\">mantell</strong> i <strong class=\"kw\">nucli</strong>.", hint: "Són tres capes. De fora cap a dins.", answer: "La geosfera té tres capes: <strong class=\"kw\">escorça</strong>, <strong class=\"kw\">mantell</strong> i <strong class=\"kw\">nucli</strong>.\n\n• Escorça: continental (<strong class=\"kw\">50 km</strong>) i oceànica (<strong class=\"kw\">12 km</strong>).\n• Mantell: fins als <strong class=\"kw\">2900 km</strong>.\n• Nucli: extern i intern (es separen als <strong class=\"kw\">5150 km</strong> i arriba fins als <strong class=\"kw\">6371 km</strong>).\n\n✏️ Dibuix: Tall en forma de con marcant les profunditats clau." },
+      {qNum: 3, category: "L'Escorça", question: "3. Explica la capa de la Terra: escorça.", shortAnswer: "És la de fora. Continental: <strong class=\"kw\">50 km</strong> i roques clares (<strong class=\"kw\">granit</strong>). Oceànica: <strong class=\"kw\">12 km</strong> i roques fosques (<strong class=\"kw\">basalt</strong>).", hint: "Hi ha dos tipus: continental i oceànica.", answer: "És la capa més externa. Hi ha dos tipus:\n• <strong class=\"kw\">Escorça continental</strong>: <strong class=\"kw\">50 km</strong> de gruix. Sòlida, formada per roques clares (la més abundant és el <strong class=\"kw\">granit</strong>).\n• <strong class=\"kw\">Escorça oceànica</strong>: <strong class=\"kw\">12 km</strong> de gruix. Més densa, formada per roques fosques (la més abundant és el <strong class=\"kw\">basalt</strong>)." },
+      {qNum: 4, category: "El Mantell", question: "4. Explica la capa de la Terra: mantell.", shortAnswer: "Fins als <strong class=\"kw\">2900 km</strong>. És la més gran, de <strong class=\"kw\">peridotites</strong>, sòlida però plàstica.", hint: "Fins als 2900 km, plàstica.", answer: "S'estén fins als <strong class=\"kw\">2900 km</strong>. És la capa més voluminosa. Formada per roques anomenades <strong class=\"kw\">peridotites</strong>. És sòlida però plàstica i assoleix temperatures entre 1000 °C i 3000 °C." },
+      {qNum: 5, category: "El Nucli", question: "5. Explica la capa de la Terra: nucli.", shortAnswer: "Capa interna de <strong class=\"kw\">ferro</strong>. Extern: líquid. Intern: sòlid.", hint: "L'única capa amb una part líquida.", answer: "És la capa més interna, composta de <strong class=\"kw\">ferro</strong> i xicotetes quantitats de <strong class=\"kw\">níquel</strong>. S'hi diferencien:\n• <strong class=\"kw\">Nucli extern</strong>: única capa de la Terra en estat líquid.\n• <strong class=\"kw\">Nucli intern</strong>: des dels <strong class=\"kw\">5150 km</strong> fins als <strong class=\"kw\">6371 km</strong>, en estat sòlid." },
+      {qNum: 6, category: "Minerals", question: "6. Escriu una definició de mineral que continga les seues característiques.", shortAnswer: "És un cos <strong class=\"kw\">sòlid</strong>, <strong class=\"kw\">pur</strong> i <strong class=\"kw\">d'origen natural</strong>. Exemple: el <strong class=\"kw\">quars</strong>.", hint: "Sòlid, pur, natural.", answer: "Un mineral és un cos <strong class=\"kw\">sòlid</strong>, <strong class=\"kw\">pur</strong> (amb composició química definida) i <strong class=\"kw\">d'origen natural</strong> (no fabricat pels humans). Exemple: el <strong class=\"kw\">quars</strong> o el <strong class=\"kw\">diamant</strong>.", note: "Tot i que demana quatre característiques, el llibre només en dóna tres. Queda't amb: sòlid, pur i natural." },
+      {qNum: 7, category: "Usos dels Minerals", question: "7. Enumera per a què s'utilitzen els minerals.", shortAnswer: "Construcció, pintures, mòbils, joies, cables i cuina.", hint: "Sis usos, inclou els mòbils.", answer: "• Construcció: guix, ferro en bigues.\n• Pintures, ceràmiques i vidre.\n• Telèfons mòbils: s'usa coltan.\n• Joieria: or, diamant.\n• Electricitat: cables de coure.\n• Estris de cuina: alumini, ferro." },
+      {qNum: 8, category: "Propietats dels Minerals", question: "8. Quines són les propietats dels minerals? Enumera-les.", shortAnswer: "Color, ratlla, lluïssor, duresa, hàbit, exfoliació i tenacitat.", hint: "Són 7 propietats per a reconéixer-los.", answer: "• <strong class=\"kw\">Color</strong>: de la superfície.\n• <strong class=\"kw\">Ratlla</strong>: color en pols.\n• <strong class=\"kw\">Lluïssor</strong>: com reflecteix la llum.\n• <strong class=\"kw\">Duresa</strong>: resistència a ser ratllat.\n• <strong class=\"kw\">Hàbit</strong>: forma geomètrica.\n• <strong class=\"kw\">Exfoliació</strong>: com es trenca en trossos regulars.\n• <strong class=\"kw\">Tenacitat</strong>: resistència a trencar-se." },
+      {qNum: 9, category: "Duresa", question: "9. Què és l'escala de Mohs?", shortAnswer: "Una escala de duresa de l'1 (<strong class=\"kw\">talc</strong>) al 10 (<strong class=\"kw\">diamant</strong>).", hint: "Té 10 posicions.", answer: "És una escala del 1 al 10 per mesurar la <strong class=\"kw\">duresa</strong> dels minerals (resistència a ser ratllats). El número 1 és el més tou (<strong class=\"kw\">talc</strong>) i el 10 el més dur (<strong class=\"kw\">diamant</strong>)." },
+      {qNum: 10, category: "Duresa", question: "10. Un mineral amb duresa 7,5, per qui és ratllat i quins ratlla? Ratlla el vidre? És ratllat pel quars?", shortAnswer: "El ratllen: topazi, corindó, diamant. Ratlla: de l'1 al 7. Sí ratlla el vidre. No és ratllat pel quars.", hint: "Compara'l amb el 5, 7, 8, 9 i 10.", answer: "Seguint l'escala de Mohs (el dur ratlla al tou):\n• Ratlla els minerals des del talc (1) fins al <strong class=\"kw\">quars</strong> (7) i també el vidre (5).\n• El ratllen el topazi (8), el corindó (9) i el <strong class=\"kw\">diamant</strong> (10).\n• No és ratllat pel quars (7), perquè 7,5 és més dur que 7." },
+      {qNum: 11, category: "Roques", question: "11. Quina relació hi ha entre minerals i roques?", shortAnswer: "Les <strong class=\"kw\">roques</strong> són mescles de minerals.", hint: "Pensa en què està fet el granit.", answer: "Les roques són mescles naturals de minerals. Per exemple, el <strong class=\"kw\">granit</strong> està format per tres minerals junts: quars, feldespat i mica." },
+      {qNum: 12, category: "Roques Magmàtiques", question: "12. Explica les roques magmàtiques.", shortAnswer: "Es formen quan el <strong class=\"kw\">magma</strong> es refreda (plutòniques i volcàniques).", hint: "Venen del magma o lava.", answer: "Són roques formades pel refredament del <strong class=\"kw\">magma</strong>. Hi ha dos tipus:\n• <strong class=\"kw\">Plutòniques</strong>: es refreden lentament dins la Terra (ex: granit).\n• <strong class=\"kw\">Volcàniques</strong>: es refreden ràpidament a l'exterior, quan ixen pels volcans en forma de <strong class=\"kw\">lava</strong> (ex: basalt)." },
+      {qNum: 13, category: "Roques Sedimentàries", question: "13. Explica les roques sedimentàries.", shortAnswer: "Es formen amb <strong class=\"kw\">sediments</strong> acumulats i compactats. Poden tindre <strong class=\"kw\">fòssils</strong>.", hint: "Acumulació i compactació.", answer: "L'aigua i el vent desgasten les roques i arrosseguen els trossos (<strong class=\"kw\">sediments</strong>) al fons del mar. Amb el temps, s'acumulen capes, es compacten i formen roques. Poden contindre <strong class=\"kw\">fòssils</strong>." },
+      {qNum: 14, category: "Roques Metamòrfiques", question: "14. Explica les roques metamòrfiques.", shortAnswer: "Altres roques transformades per altes temperatures i pressions.", hint: "Sense arribar a fondre's.", answer: "Es formen per la transformació d'altres roques ja existents a causa de l'acció d'altes temperatures i pressions. Si s'escalfen massa, es fonen i es fan magma." },
+      {qNum: 15, category: "Combustibles", question: "15. Què són els combustibles fòssils? Posa exemples.", shortAnswer: "Roques formades de restes d'éssers vius (ex: <strong class=\"kw\">carbó</strong> i <strong class=\"kw\">petroli</strong>).", hint: "Són font d'energia no renovable.", answer: "Són roques sedimentàries que s'han format a partir de restes d'éssers vius de fa milions d'anys que van quedar soterrats.\n• <strong class=\"kw\">Carbó</strong>: de restes d'arbres.\n• <strong class=\"kw\">Petroli</strong>: única roca líquida, de restes de microorganismes marins." },
+      {qNum: 16, category: "Combustibles", question: "16. Indica els tipus de carbó que hi ha.", shortAnswer: "<strong class=\"kw\">Torba</strong>, <strong class=\"kw\">lignit</strong>, <strong class=\"kw\">hulla</strong> i <strong class=\"kw\">antracita</strong>.", hint: "Recorda les inicials T-L-H-A.", answer: "De menys a més energètic: <strong class=\"kw\">Torba</strong>, <strong class=\"kw\">lignit</strong>, <strong class=\"kw\">hulla</strong> i <strong class=\"kw\">antracita</strong>." },
+      {qNum: 17, category: "Classificació", question: "17. Enumera tres exemples de roques sedimentàries.", shortAnswer: "Gres, argila i calcària.", hint: "També el conglomerat.", answer: "Gres, argila i calcària." },
+      {qNum: 18, category: "Classificació", question: "18. Enumera tres exemples de roques metamòrfiques.", shortAnswer: "Pissarra, quarsita i marbre.", hint: "Molt usades per a teulades i escultures.", answer: "Pissarra, quarsita i marbre." },
+      {qNum: 19, category: "Classificació", question: "19. Enumera tres exemples de roques magmàtiques.", shortAnswer: "Granit, basalt i pedra tosca.", hint: "Una és plutònica i dos volcàniques.", answer: "Granit, basalt i pedra tosca." }
+    ];
+
+    const QUIZ_DATABASE = [
+      { q: "1. Quins són els 4 components de la Terra?", correct: "Geosfera, hidrosfera, atmosfera i biosfera", wrong: ["Escorça, mantell, nucli i magma", "Roques, minerals, aigua i núvols"], expl: "La <strong class=\"kw\">geosfera</strong> és la roca; la <strong class=\"kw\">hidrosfera</strong>, l'aigua; l'<strong class=\"kw\">atmosfera</strong>, l'aire; i la <strong class=\"kw\">biosfera</strong>, els éssers vius." },
+      { q: "2. Quines són les capes de la geosfera?", correct: "Escorça, mantell i nucli", wrong: ["Atmosfera, hidrosfera i biosfera", "Escorça continental, oceànica i magma"], expl: "De fora cap a dins: <strong class=\"kw\">escorça</strong>, <strong class=\"kw\">mantell</strong> i <strong class=\"kw\">nucli</strong>." },
+      { q: "3. Quina frase sobre l'escorça és correcta?", correct: "L'escorça continental fa 50 km i l'oceànica, 12 km", wrong: ["És líquida i està feta de ferro", "L'oceànica fa 50 km i la continental 12 km"], expl: "L'<strong class=\"kw\">escorça continental</strong> és la capa més gruixuda (<strong class=\"kw\">50 km</strong>) amb roques clares com el granit." },
+      { q: "4. Quina frase sobre el mantell és correcta?", correct: "Arriba fins als 2900 km, és la capa més gran i és de peridotites", wrong: ["És l'única capa líquida i assoleix 5000 ºC", "És la capa de fora, feta de granit i basalt"], expl: "El <strong class=\"kw\">mantell</strong> és la capa més voluminosa fins als <strong class=\"kw\">2900 km</strong>. És de <strong class=\"kw\">peridotites</strong>." },
+      { q: "5. Quina frase sobre el nucli és correcta?", correct: "És de ferro: el nucli extern és líquid i l'intern és sòlid", wrong: ["És de peridotites i arriba a 3000 ºC", "Tot el nucli és completament líquid i fet de magma"], expl: "El <strong class=\"kw\">nucli extern</strong> és l'única capa líquida de la Terra, fet de <strong class=\"kw\">ferro</strong>." },
+      { q: "6. Un mineral és un cos…", correct: "sòlid, pur i d'origen natural", wrong: ["líquid, mesclat i artificial", "sòlid, mesclat i fabricat per les persones", "gasós, pur i natural"], expl: "Un <strong class=\"kw\">mineral</strong> té caràcter <strong class=\"kw\">sòlids</strong>, <strong class=\"kw\">purs</strong> i <strong class=\"kw\">d'origen natural</strong>. Les mescles de minerals es diuen roques." },
+      { q: "7. Quina d'aquestes és una utilitat dels minerals?", correct: "Fabricar cables, mòbils i joies", wrong: ["Com a combustibles fòssils per a generar electricitat", "Per a obtindre aigua potable i oxigen"], expl: "Exemples clars són el <strong class=\"kw\">coure</strong> per als cables o l'or i el diamant per a les joies." },
+      { q: "8. Quines són propietats dels minerals?", correct: "Color, ratlla, lluïssor, duresa, hàbit, exfoliació i tenacitat", wrong: ["Magma, lava, temperatura i profunditat", "Sediments, erosió, compactació i fòssils"], expl: "Les opcions incorrectes descriuen volcans i roques sedimentàries, no propietats dels minerals." },
+      { q: "9. Què és l'escala de Mohs?", correct: "Una escala de duresa de l'1 (talc) al 10 (diamant)", wrong: ["Una escala per a mesurar els terratrèmols de l'1 al 10", "Una escala de duresa de l'1 (diamant) al 10 (talc)"], expl: "L'<strong class=\"kw\">escala de Mohs</strong> mesura la <strong class=\"kw\">duresa</strong>, on l'1 és el més tou i el 10 el més dur." },
+      { q: "10. Un mineral té duresa 7,5. Què és cert?", correct: "Ratlla el quars i el vidre. És ratllat per topazi, corindó i diamant", wrong: ["Ratlla el topazi i el diamant, però el ratlla el vidre", "No ratlla el vidre, i és ratllat pel quars i el talc"], expl: "El dur ratlla al tou. 7,5 ratlla el vidre (5) i el quars (7), però és ratllat pel topazi (8)." },
+      { q: "11. Quina relació hi ha entre minerals i roques?", correct: "Les roques són mescles naturals de minerals", wrong: ["Els minerals són mescles de roques", "Les roques es formen exclusivament per restes d'éssers vius"], expl: "Les <strong class=\"kw\">roques</strong> són mescles de minerals. El <strong class=\"kw\">granit</strong> té quars, feldespat i mica." },
+      { q: "12. Com es formen les roques magmàtiques?", correct: "Quan el magma es refreda i es fa sòlid", wrong: ["Per l'acumulació i compactació de sediments", "Per la transformació d'altres roques amb calor i pressió"], expl: "Les <strong class=\"kw\">roques magmàtiques</strong> es formen pel refredament del <strong class=\"kw\">magma</strong> (plutòniques i volcàniques)." },
+      { q: "13. Com es formen les roques sedimentàries?", correct: "Amb sediments que s'acumulen i es compacten, i poden tindre fòssils", wrong: ["Quan la lava es refreda ràpidament en eixir d'un volcà", "Quan les roques es fonen a l'interior del mantell"], expl: "Les restes acumulades al mar es compacten formant <strong class=\"kw\">roques sedimentàries</strong> amb possibles <strong class=\"kw\">fòssils</strong>." },
+      { q: "14. Com es formen les roques metamòrfiques?", correct: "Quan altres roques es transformen per altes temperatures i pressions", wrong: ["A partir de restes d'arbres en zones pantanoses", "Pel refredament lent del magma a l'escorça"], expl: "Les <strong class=\"kw\">roques metamòrfiques</strong> no arriben a fondre's, només es transformen per la calor i pressió." },
+      { q: "15. Què són els combustibles fòssils?", correct: "Roques formades per restes d'éssers vius de fa milions d'anys", wrong: ["Roques volcàniques que conserven restes de dinosaures", "Minerals molt durs formats al nucli de la Terra"], expl: "Són roques sedimentàries molt energètiques com el <strong class=\"kw\">carbó</strong> i el <strong class=\"kw\">petroli</strong>." },
+      { q: "16. Quins són els tipus de carbó?", correct: "Torba, lignit, hulla i antracita", wrong: ["Gres, argila, calcària i conglomerat", "Granit, basalt i pedra tosca"], expl: "El carbó es transforma i guanya energia en l'ordre: <strong class=\"kw\">Torba, Lignit, Hulla i Antracita</strong>." },
+      { q: "17. Quines d'estes roques són sedimentàries?", correct: "Gres, argila i calcària", wrong: ["Pissarra, quarsita i marbre", "Granit, basalt i obsidiana"], expl: "Gres, argila i calcària són sedimentàries. La resta són metamòrfiques o magmàtiques." },
+      { q: "18. Quines d'estes roques són metamòrfiques?", correct: "Pissarra, quarsita i marbre", wrong: ["Torba, lignit i hulla", "Gres, argila i calcària"], expl: "La pissarra, la quarsita i el marbre són metamòrfiques, produïdes per calor i pressió." },
+      { q: "19. Quines d'estes roques són magmàtiques?", correct: "Granit, basalt i pedra tosca", wrong: ["Pissarra, quarsita i marbre", "Conglomerat, travertí i gres"], expl: "El granit és magmàtica plutònica; el basalt i la pedra tosca són magmàtiques volcàniques." }
+    ];
+
+    let currentTab = 'home';
+    let currentQuestionsSubView = 'cards';
+    let currentPracticeSubTab = 'mohs';
+    let answerDisplayMode = 'short';
+
+    let currentIndex = 0;
+    let isFlipped = false;
+    let currentFilter = 'all';
+
+    let learnedCards = new Set();
+    let pendingCards = new Set();
+    let readSections = new Set();
+    let bestQuizScore = null;
+
+    let currentExamQuestions = [];
+    let examTimerInterval = null;
+    let examSeconds = 0;
+
+    let mohsPlayerSlots = Array(10).fill(null);
+    let selectedMohsMineral = null;
+
+    let quizQuestionList = [];
+    let quizCurrentIdx = 0;
+    let quizScoreCount = 0;
+    let quizFailedQuestions = [];
+    let quizOptionLocked = false;
+    let quizIsFullRun = true;
+
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('aulanext_theme', isDark ? 'dark' : 'light'); } catch (e) {}
+      updateThemeToggleIcon();
+      showToast(isDark ? t('toast_dark') : t('toast_light'));
+    }
+
+    function updateThemeToggleIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('theme-toggle-icon');
+      if (icon) icon.innerText = isDark ? '☀️' : '🌙';
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('aulanext_learned_q', JSON.stringify([...learnedCards]));
+        localStorage.setItem('aulanext_pending_q', JSON.stringify([...pendingCards]));
+        localStorage.setItem('aulanext_read_sec', JSON.stringify([...readSections]));
+        if (bestQuizScore !== null) { localStorage.setItem('aulanext_best_score', bestQuizScore.toString()); }
+      } catch (e) {}
+    }
+
+    function updateDashboardStats() {
+      document.getElementById('stat-learned-questions').innerText = `${learnedCards.size} / 19`;
+      document.getElementById('stat-read-sections').innerText = `${readSections.size} / 5`;
+      document.getElementById('stat-best-score').innerText = bestQuizScore !== null ? `${bestQuizScore.toFixed(1)} / 10` : '- / 10';
+    }
+
+    function confirmResetProgress() {
+      const confirmBox = document.createElement('div');
+      confirmBox.className = "fixed inset-0 bg-navy/60 backdrop-blur-sm z-50 flex items-center justify-center p-4";
+      confirmBox.innerHTML = `
+        <div class="bg-white dark:bg-dark-card rounded-3xl p-6 sm:p-7 max-w-sm w-full space-y-4 text-center border-2 border-slate-200 dark:border-dark-border shadow-xl">
+          <span class="text-3xl">⚠️</span>
+          <h4 class="text-[21px] font-black text-navy dark:text-white">${t('modal_reset_title')}</h4>
+          <p class="text-base text-slate-600 dark:text-dark-subtext font-bold">${t('modal_reset_desc')}</p>
+          <div class="flex items-center justify-center gap-2 pt-2">
+            <button id="btn-cancel-reset" class="btn-touch px-4 py-2 rounded-xl text-base font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text">${t('modal_reset_cancel')}</button>
+            <button id="btn-ok-reset" class="btn-touch px-4 py-2 rounded-xl text-base font-black bg-danger text-white">${t('modal_reset_ok')}</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(confirmBox);
+      document.getElementById('btn-cancel-reset').onclick = () => document.body.removeChild(confirmBox);
+      document.getElementById('btn-ok-reset').onclick = () => {
+        learnedCards.clear(); pendingCards.clear(); readSections.clear(); bestQuizScore = null;
+        saveState(); updateDashboardStats(); updateReadSectionsUI(); renderCurrentCard(); renderDirectoryList();
+        document.body.removeChild(confirmBox);
+        showToast(t('toast_reset'));
+      };
+    }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      const allTabs = ['home', 'learn', 'questions', 'practice', 'quiz'];
+      allTabs.forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tabId);
+        const dBtn = document.getElementById(`nav-btn-${t}`);
+        if (dBtn) dBtn.className = (t === tabId) ? "btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-blue text-white shadow-sm" : "btn-touch px-3.5 py-2 rounded-xl text-base font-extrabold transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+        const mBtn = document.getElementById(`mob-btn-${t}`);
+        if (mBtn) mBtn.className = (t === tabId) ? "flex flex-col items-center justify-center p-1.5 text-blue dark:text-blue-400 font-extrabold text-[13px] min-w-[56px] min-h-[44px]" : "flex flex-col items-center justify-center p-1.5 text-slate-500 dark:text-dark-subtext font-extrabold text-[13px] min-w-[56px] min-h-[44px]";
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleSectionRead(secNum) {
+      if (readSections.has(secNum)) { readSections.delete(secNum); showToast(t('toast_sec_pend', {n: secNum})); } 
+      else { readSections.add(secNum); showToast(t('toast_sec_comp', {n: secNum})); }
+      saveState(); updateDashboardStats(); updateReadSectionsUI();
+    }
+
+    function updateReadSectionsUI() {
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`btn-read-sec-${i}`);
+        if (btn) {
+          if (readSections.has(i)) {
+            btn.className = "btn-touch px-4 py-1.5 rounded-xl bg-green text-white font-bold text-[14px]";
+            btn.innerText = t('btn_read');
+          } else {
+            btn.className = "btn-touch px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text font-bold text-[14px] hover:bg-green-100 dark:hover:bg-green-900/40";
+            btn.innerText = t('btn_mark_read');
+          }
+        }
+      }
+    }
+
+    function toggleAnswer(id) { const el = document.getElementById(id); if (el) el.classList.toggle('hidden'); }
+
+    function setQuestionsSubView(view) {
+      currentQuestionsSubView = view;
+      document.getElementById('subview-cards').classList.toggle('hidden', view !== 'cards');
+      document.getElementById('subview-list').classList.toggle('hidden', view !== 'list');
+      document.getElementById('view-toggle-cards').className = view === 'cards' ? "btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all bg-blue text-white shadow-sm" : "btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+      document.getElementById('view-toggle-list').className = view === 'list' ? "btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all bg-blue text-white shadow-sm" : "btn-touch px-3.5 py-1 rounded-lg text-[14px] font-black transition-all text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+    }
+
+    function setAnswerMode(mode) {
+      answerDisplayMode = mode;
+      document.getElementById('btn-ans-short').className = mode === 'short' ? "btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-blue text-white shadow-sm" : "btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+      document.getElementById('btn-ans-full').className = mode === 'full' ? "btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-blue text-white shadow-sm" : "btn-touch px-3 py-1 rounded-xl text-[14px] font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+      renderCardAnswerText();
+    }
+
+    function renderCardAnswerText() {
+      const activeList = getFilteredCards();
+      if (activeList.length === 0) return;
+      const card = activeList[currentIndex];
+      if (!card) return;
+      const answerEl = document.getElementById('card-back-text');
+      if (answerDisplayMode === 'short') { answerEl.innerHTML = `<span class="text-blue dark:text-blue-400 font-black block mb-1">${t('list_ans_key')}</span>${card.shortAnswer}`; } 
+      else { answerEl.innerHTML = card.answer; }
+    }
+
+    function toggleCardFlip() {
+      isFlipped = !isFlipped;
+      const inner = document.getElementById('flashcard-inner');
+      if (!inner) return;
+      if (isFlipped) inner.classList.add('rotate-y-180'); else inner.classList.remove('rotate-y-180');
+    }
+
+    function renderCurrentCard() {
+      const activeList = getFilteredCards();
+      const inner = document.getElementById('flashcard-inner');
+      if (inner) { inner.classList.remove('rotate-y-180'); isFlipped = false; }
+      if (activeList.length === 0) {
+        document.getElementById('card-front-number').innerText = t('card_none');
+        document.getElementById('card-front-question').innerText = t('card_none_desc');
+        document.getElementById('card-front-hint-box').classList.add('hidden');
+        document.getElementById('card-index-indicator').innerText = "0";
+        document.getElementById('card-total-indicator').innerText = "0";
+        return;
+      }
+      if (currentIndex >= activeList.length) currentIndex = activeList.length - 1;
+      if (currentIndex < 0) currentIndex = 0;
+      const card = activeList[currentIndex];
+      document.getElementById('card-front-number').innerText = t('card_q_num', { n: card.qNum });
+      document.getElementById('card-front-question').innerText = card.question;
+      document.getElementById('card-front-hint').innerText = card.hint || "";
+      document.getElementById('card-front-hint-box').classList.toggle('hidden', !card.hint);
+      document.getElementById('card-index-indicator').innerText = (currentIndex + 1).toString();
+      document.getElementById('card-total-indicator').innerText = activeList.length.toString();
+      document.getElementById('card-back-number').innerText = t('card_ans_num', { n: card.qNum });
+      document.getElementById('card-back-category').innerText = card.category;
+      renderCardAnswerText();
+      const noteContainer = document.getElementById('card-back-note-container');
+      const noteText = document.getElementById('card-back-note-text');
+      if (card.note) { noteContainer.classList.remove('hidden'); noteText.innerText = card.note; } 
+      else { noteContainer.classList.add('hidden'); noteText.innerText = ''; }
+    }
+
+    function nextCard() { const activeList = getFilteredCards(); if (activeList.length === 0) return; currentIndex = (currentIndex + 1) % activeList.length; renderCurrentCard(); }
+    function prevCard() { const activeList = getFilteredCards(); if (activeList.length === 0) return; currentIndex = (currentIndex - 1 + activeList.length) % activeList.length; renderCurrentCard(); }
+
+    function getFilteredCards() {
+      if (currentFilter === 'pending') return FLASHCARDS.filter(c => pendingCards.has(c.qNum));
+      return FLASHCARDS;
+    }
+
+    function filterFlashcards(filterType) {
+      currentFilter = filterType; currentIndex = 0;
+      ['all', 'pending'].forEach(t => {
+        const btn = document.getElementById(`filter-${t}`);
+        if (btn) btn.className = (t === filterType) ? "btn-touch px-4 py-1.5 rounded-xl text-[14px] font-black bg-navy text-white" : "btn-touch px-4 py-1.5 rounded-xl text-[14px] font-black bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+      });
+      renderCurrentCard();
+    }
+
+    function markStatus(status) {
+      const activeList = getFilteredCards();
+      if (activeList.length === 0) return;
+      const card = activeList[currentIndex];
+      if (!card) return;
+      if (status === 'learned') {
+        learnedCards.add(card.qNum); pendingCards.delete(card.qNum); showToast(t('toast_learned'));
+      } else {
+        pendingCards.add(card.qNum); learnedCards.delete(card.qNum); showToast(t('toast_review'));
+      }
+      saveState(); updateDashboardStats();
+      if (currentFilter === 'pending') {
+        const newList = getFilteredCards();
+        if (currentIndex >= newList.length) currentIndex = Math.max(0, newList.length - 1);
+        renderCurrentCard();
+      } else {
+        nextCard();
+      }
+    }
+
+    function renderDirectoryList() {
+      const container = document.getElementById('list-container');
+      if (!container) return;
+      container.innerHTML = '';
+      FLASHCARDS.forEach((card, idx) => {
+        const cardEl = document.createElement('div');
+        cardEl.className = "bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-3";
+        cardEl.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2.5 py-0.5 rounded-full text-[13px] font-black bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400">${t('card_q_num', { n: card.qNum })}</span>
+                <span class="text-sm font-bold text-slate-400 dark:text-dark-subtext">${card.category}</span>
+              </div>
+              <h4 class="font-black text-navy dark:text-white text-[21px]">${card.question}</h4>
+            </div>
+            <button onclick="goToCardIndex(${idx})" class="btn-touch shrink-0 px-3.5 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400 font-black text-[14px] hover:bg-blue-100 dark:hover:bg-blue-900/60">${t('list_prac')}</button>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border text-base space-y-2">
+            <p><strong class="text-blue dark:text-blue-400">${t('list_ans_key')}</strong> ${card.shortAnswer}</p>
+            <details class="cursor-pointer">
+              <summary class="font-black text-navy dark:text-white text-sm hover:underline">${t('list_ans_show')}</summary>
+              <div class="mt-2 pt-2 border-t border-slate-200 dark:border-dark-border space-y-2 text-slate-700 dark:text-dark-subtext">
+                <div class="whitespace-pre-line">${card.answer}</div>
+                ${card.note ? `<div class="p-2.5 bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl text-sm text-orange-800 dark:text-orange-400 font-bold">⚠️ ${card.note}</div>` : ''}
+              </div>
+            </details>
+          </div>
+        `;
+        container.appendChild(cardEl);
+      });
+    }
+
+    function goToCardIndex(idx) {
+      setQuestionsSubView('cards'); currentFilter = 'all'; filterFlashcards('all');
+      currentIndex = idx; renderCurrentCard();
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function setPracticeSubTab(sub) {
+      currentPracticeSubTab = sub;
+      ['mohs', 'scratch', 'exercises', 'mockexam'].forEach(s => {
+        const el = document.getElementById(`prac-subtab-${s}`);
+        const btn = document.getElementById(`prac-tab-btn-${s}`);
+        if (el) el.classList.toggle('hidden', s !== sub);
+        if (btn) btn.className = (s === sub) ? "btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-blue text-white shadow-sm" : "btn-touch px-4 py-2 rounded-2xl text-[14px] font-black transition-all bg-slate-100 dark:bg-dark-border text-navy dark:text-dark-text hover:bg-slate-200 dark:hover:bg-slate-700";
+      });
+    }
+
+    function initMohsGame() { renderMohsSlots(); renderMohsPool(); }
+    function renderMohsSlots() {
+      const grid = document.getElementById('mohs-slots-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      for (let i = 0; i < 10; i++) {
+        const num = i + 1;
+        const placed = mohsPlayerSlots[i];
+        const slotEl = document.createElement('div');
+        slotEl.className = `p-3 rounded-2xl border-2 transition-all flex flex-col justify-between items-center text-center cursor-pointer min-h-[110px] ${placed ? 'bg-blue-50 dark:bg-blue-950/60 border-blue dark:border-blue-400 shadow-sm' : 'bg-slate-50 dark:bg-dark-bg border-dashed border-slate-300 dark:border-dark-border hover:border-blue'}`;
+        slotEl.onclick = () => onSlotClick(i);
+        let content = `<span class="w-7 h-7 rounded-full bg-slate-200 dark:bg-dark-border text-navy dark:text-dark-text text-[13px] font-mono font-black flex items-center justify-center mb-1">${num}</span>`;
+        if (placed) { content += `<span class="font-black text-sm sm:text-base text-navy dark:text-white">${placed.name}</span><span class="text-[11px] font-bold text-slate-500 dark:text-dark-subtext mt-1">${t('mohs_click_remove')}</span>`; } 
+        else { content += `<span class="text-sm text-slate-400 dark:text-dark-subtext font-bold">${t('mohs_empty')}</span><span class="text-[11px] text-blue dark:text-blue-400 font-black">${t('mohs_click_put')}</span>`; }
+        slotEl.innerHTML = content;
+        grid.appendChild(slotEl);
+      }
+    }
+
+    function renderMohsPool() {
+      const poolGrid = document.getElementById('mohs-pool-grid');
+      if (!poolGrid) return;
+      poolGrid.innerHTML = '';
+      const placedNames = mohsPlayerSlots.filter(Boolean).map(m => m.name);
+      const available = MOHS_OFFICIAL.filter(m => !placedNames.includes(m.name));
+      if (available.length === 0) { poolGrid.innerHTML = `<span class="text-base font-black text-green dark:text-green-400 py-2">${t('mohs_all_placed')}</span>`; return; }
+      available.forEach(min => {
+        const btn = document.createElement('button');
+        const isSelected = selectedMohsMineral && selectedMohsMineral.name === min.name;
+        btn.className = `btn-touch px-3.5 py-2 rounded-xl text-base font-black border-2 transition-all flex items-center gap-1.5 shadow-sm ${isSelected ? 'bg-blue text-white border-blue scale-105 ring-2 ring-blue-300' : 'bg-white dark:bg-dark-card text-navy dark:text-dark-text border-slate-200 dark:border-dark-border hover:border-blue'}`;
+        btn.onclick = () => selectMohsMineral(min);
+        btn.innerHTML = `💎 ${min.name}`;
+        poolGrid.appendChild(btn);
+      });
+    }
+
+    function selectMohsMineral(min) {
+      const badge = document.getElementById('mohs-selection-badge');
+      if (selectedMohsMineral && selectedMohsMineral.name === min.name) {
+        selectedMohsMineral = null;
+        badge.innerText = t('mohs_sel_none');
+        badge.className = "text-sm font-bold text-slate-500 dark:text-dark-subtext bg-slate-100 dark:bg-dark-border px-3 py-1 rounded-xl";
+      } else {
+        selectedMohsMineral = min;
+        badge.innerText = t('mohs_sel', { n: min.name });
+        badge.className = "text-sm font-black text-blue dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 border border-blue dark:border-blue-400 px-3 py-1 rounded-xl animate-pulse";
+      }
+      renderMohsPool();
+    }
+
+    function onSlotClick(index) {
+      if (selectedMohsMineral) {
+        mohsPlayerSlots[index] = selectedMohsMineral;
+        selectedMohsMineral = null;
+        const badge = document.getElementById('mohs-selection-badge');
+        badge.innerText = t('mohs_sel_none');
+        badge.className = "text-sm font-bold text-slate-500 dark:text-dark-subtext bg-slate-100 dark:bg-dark-border px-3 py-1 rounded-xl";
+        renderMohsSlots(); renderMohsPool();
+      } else if (mohsPlayerSlots[index]) {
+        mohsPlayerSlots[index] = null;
+        renderMohsSlots(); renderMohsPool();
+      }
+    }
+
+    function checkMohsGame() {
+      let correctCount = 0;
+      const feedback = document.getElementById('mohs-feedback');
+      feedback.classList.remove('hidden');
+      mohsPlayerSlots.forEach((placed, idx) => { if (placed && placed.num === (idx + 1)) correctCount++; });
+      if (correctCount === 10) {
+        feedback.className = "p-4 rounded-2xl text-base font-black bg-green-50 dark:bg-green-950/40 border border-green text-green dark:text-green-400 shadow-sm";
+        feedback.innerHTML = t('mohs_fb_ok');
+      } else {
+        feedback.className = "p-4 rounded-2xl text-base font-black bg-orange-50 dark:bg-orange-950/40 border border-orange text-orange-700 dark:text-orange-400 shadow-sm";
+        feedback.innerHTML = t('mohs_fb_bad', { n: correctCount });
+      }
+    }
+
+    function resetMohsGame() {
+      mohsPlayerSlots = Array(10).fill(null);
+      selectedMohsMineral = null;
+      document.getElementById('mohs-feedback').classList.add('hidden');
+      const badge = document.getElementById('mohs-selection-badge');
+      if (badge) badge.innerText = t('mohs_sel_none');
+      renderMohsSlots(); renderMohsPool();
+    }
+
+    function initScratchSim() {
+      const selectA = document.getElementById('scratch-item-a');
+      const selectB = document.getElementById('scratch-item-b');
+      if (!selectA || !selectB) return;
+      selectA.innerHTML = ''; selectB.innerHTML = '';
+      SCRATCH_ITEMS.forEach(item => {
+        const optA = document.createElement('option'); optA.value = item.id; optA.innerText = `${item.name} [Duresa ${item.hardness}]`; selectA.appendChild(optA);
+        const optB = document.createElement('option'); optB.value = item.id; optB.innerText = `${item.name} [Duresa ${item.hardness}]`; selectB.appendChild(optB);
+      });
+      selectA.value = "vidre"; selectB.value = "ortosa";
+      runScratchTest();
+    }
+
+    function runScratchTest() {
+      const idA = document.getElementById('scratch-item-a').value;
+      const idB = document.getElementById('scratch-item-b').value;
+      const itemA = SCRATCH_ITEMS.find(i => i.id === idA);
+      const itemB = SCRATCH_ITEMS.find(i => i.id === idB);
+      document.getElementById('scratch-desc-a').innerText = itemA.desc;
+      document.getElementById('scratch-desc-b').innerText = itemB.desc;
+      const titleEl = document.getElementById('scratch-result-title');
+      const subEl = document.getElementById('scratch-result-subtitle');
+      const explEl = document.getElementById('scratch-result-explanation');
+      const iconEl = document.getElementById('scratch-result-icon');
+
+      if (itemA.hardness === itemB.hardness) {
+        iconEl.innerText = "⚖️"; titleEl.innerText = t('scratch_eq_title'); subEl.innerText = `${itemA.name} = ${itemB.name} (${itemA.hardness})`; explEl.innerHTML = t('scratch_eq_desc', { n: itemA.hardness });
+      } else if (itemA.hardness > itemB.hardness) {
+        iconEl.innerText = "⚡"; titleEl.innerText = t('scratch_yes_title', { a: itemA.name, b: itemB.name }); subEl.innerText = t('scratch_yes_sub', { ha: itemA.hardness, hb: itemB.hardness }); explEl.innerHTML = t('scratch_yes_desc', { a: itemA.name, ha: itemA.hardness, b: itemB.name, hb: itemB.hardness });
+      } else {
+        iconEl.innerText = "🛡️"; titleEl.innerText = t('scratch_no_title', { a: itemA.name, b: itemB.name }); subEl.innerText = t('scratch_no_sub', { ha: itemA.hardness, hb: itemB.hardness }); explEl.innerHTML = t('scratch_no_desc', { a: itemA.name, ha: itemA.hardness, b: itemB.name, hb: itemB.hardness });
+      }
+    }
+
+    function setScratchPreset(preset) {
+      const selectA = document.getElementById('scratch-item-a');
+      const selectB = document.getElementById('scratch-item-b');
+      if (preset === 'p10_vidre') { selectA.value = "turmalina"; selectB.value = "vidre"; } 
+      else if (preset === 'p10_quars') { selectA.value = "turmalina"; selectB.value = "quars"; } 
+      else if (preset === 'vidre_ortosa') { selectA.value = "vidre"; selectB.value = "ortosa"; } 
+      else if (preset === 'apatita_vidre') { selectA.value = "apatita"; selectB.value = "vidre"; }
+      runScratchTest();
+    }
+
+    function generateExam() {
+      currentExamQuestions = shuffle(FLASHCARDS).slice(0, 10);
+      const container = document.getElementById('exam-questions-container');
+      if (!container) return;
+      container.innerHTML = '';
+      document.getElementById('exam-results-card').classList.add('hidden');
+      const showHints = document.getElementById('exam-toggle-hints').checked;
+
+      currentExamQuestions.forEach((q, idx) => {
+        const qCard = document.createElement('div');
+        qCard.className = "bg-white dark:bg-dark-card p-6 rounded-3xl border-2 border-slate-200 dark:border-dark-border shadow-sm space-y-3";
+        qCard.innerHTML = `<div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded-full text-[13px] font-black bg-blue-50 dark:bg-blue-950/60 text-blue dark:text-blue-400">${t('mock_q_of', { n: idx + 1 })}</span><span class="text-sm font-bold text-slate-400 dark:text-dark-subtext">${q.category}</span></div><h4 class="font-black text-navy dark:text-white text-[21px]">${q.question}</h4>${q.hint ? `<p class="exam-hint-box ${showHints ? '' : 'hidden'} text-base text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 p-2.5 rounded-xl border border-orange-200 dark:border-orange-800 font-bold"><span data-i18n="q_hint">💡 Pista:</span> ${q.hint}</p>` : ''}<div class="pt-1"><button onclick="toggleExamAnswer('exam-ans-${idx}')" class="btn-touch px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-dark-border text-base font-black text-navy dark:text-dark-text hover:bg-slate-50 dark:hover:bg-dark-bg">${t('mock_check')}</button><div id="exam-ans-${idx}" class="hidden mt-3 p-4 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-2xl text-base text-slate-800 dark:text-dark-text space-y-2"><p><strong class="text-blue dark:text-blue-400">${t('list_ans_key')}</strong> ${q.shortAnswer}</p><div class="whitespace-pre-line text-slate-600 dark:text-dark-subtext">${q.answer}</div>${q.note ? `<div class="p-2 bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-lg text-sm text-orange-800 dark:text-orange-400 font-bold">⚠️ ${q.note}</div>` : ''}</div></div><div class="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-dark-border text-sm flex-wrap"><span class="font-black text-navy dark:text-white">${t('mock_eval_title')}</span><label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="eval-${idx}" value="1" class="text-green"><span class="text-green dark:text-green-400 font-bold">${t('mock_eval_good')}</span></label><label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="eval-${idx}" value="0.5" class="text-orange"><span class="text-orange dark:text-orange-400 font-bold">${t('mock_eval_mid')}</span></label><label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="eval-${idx}" value="0" class="text-danger"><span class="text-danger dark:text-danger-dark font-bold">${t('mock_eval_bad')}</span></label></div>`;
+        container.appendChild(qCard);
+      });
+
+      clearInterval(examTimerInterval);
+      examSeconds = 0;
+      examTimerInterval = setInterval(() => {
+        examSeconds++;
+        const mins = String(Math.floor(examSeconds / 60)).padStart(2, '0');
+        const secs = String(examSeconds % 60).padStart(2, '0');
+        const el = document.getElementById('exam-timer');
+        if(el) el.innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function toggleExamAnswer(id) { const el = document.getElementById(id); if (el) el.classList.toggle('hidden'); }
+    function toggleExamHintsDisplay() {
+      const show = document.getElementById('exam-toggle-hints').checked;
+      document.querySelectorAll('.exam-hint-box').forEach(b => b.classList.toggle('hidden', !show));
+    }
+
+    function finishExam() {
+      let totalScore = 0;
+      for (let i = 0; i < currentExamQuestions.length; i++) {
+        const radios = document.getElementsByName(`eval-${i}`);
+        let evaluated = false;
+        for (const r of radios) { if (r.checked) { totalScore += parseFloat(r.value); evaluated = true; break; } }
+        if (!evaluated) { showToast(t('toast_eval_all')); return; }
+      }
+      clearInterval(examTimerInterval);
+      const card = document.getElementById('exam-results-card');
+      card.classList.remove('hidden');
+      document.getElementById('exam-results-score').innerText = `${totalScore.toFixed(1)} / 10`;
+      const feedEl = document.getElementById('exam-results-feedback');
+      if (totalScore >= 9) { feedEl.innerHTML = t('mock_fb_9'); } 
+      else if (totalScore >= 5) { feedEl.innerHTML = t('mock_fb_5'); } 
+      else { feedEl.innerHTML = t('mock_fb_0'); }
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function startQuiz(onlyFailed = false) {
+      const indices = (onlyFailed && quizFailedQuestions.length > 0) ? [...new Set(quizFailedQuestions.map(f => f.originalIdx))] : QUIZ_DATABASE.map((_, i) => i);
+      quizIsFullRun = indices.length === QUIZ_DATABASE.length;
+      quizQuestionList = shuffle(indices.map(idx => {
+        const item = QUIZ_DATABASE[idx];
+        return { originalIdx: idx, q: item.q, correct: item.correct, options: shuffle([item.correct, ...item.wrong]), expl: item.expl };
+      }));
+      quizCurrentIdx = 0; quizScoreCount = 0; quizFailedQuestions = [];
+      document.getElementById('quiz-screen-start').classList.add('hidden');
+      document.getElementById('quiz-screen-results').classList.add('hidden');
+      document.getElementById('quiz-screen-question').classList.remove('hidden');
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      quizOptionLocked = false;
+      const qData = quizQuestionList[quizCurrentIdx];
+      const total = quizQuestionList.length;
+      document.getElementById('quiz-progress-text').innerText = t('quiz_q_of', { n: quizCurrentIdx + 1, t: total });
+      document.getElementById('quiz-score-preview').innerText = t('quiz_hits', { n: quizScoreCount });
+      const pct = Math.round(((quizCurrentIdx) / total) * 100);
+      document.getElementById('quiz-progress-bar').style.width = `${Math.max(5, pct)}%`;
+      document.getElementById('quiz-question-title').innerText = qData.q;
+      const optsContainer = document.getElementById('quiz-options-container');
+      optsContainer.innerHTML = '';
+      document.getElementById('quiz-explanation-box').classList.add('hidden');
+      document.getElementById('quiz-next-container').classList.add('hidden');
+
+      qData.options.forEach((optText) => {
+        const optBtn = document.createElement('button');
+        optBtn.className = "btn-touch w-full p-4 rounded-2xl border-2 border-slate-200 dark:border-dark-border text-left font-bold text-navy dark:text-dark-text hover:border-blue hover:bg-blue-50/40 dark:hover:bg-blue-950/40 transition text-lg";
+        optBtn.innerHTML = `<span>${optText}</span>`;
+        optBtn.onclick = () => selectQuizOption(optBtn, optText, qData);
+        optsContainer.appendChild(optBtn);
+      });
+    }
+
+    function selectQuizOption(selectedBtn, selectedText, qData) {
+      if (quizOptionLocked) return;
+      quizOptionLocked = true;
+      const isCorrect = selectedText === qData.correct;
+      const optsContainer = document.getElementById('quiz-options-container');
+      const allButtons = optsContainer.querySelectorAll('button');
+
+      allButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove('hover:border-blue', 'hover:bg-blue-50/40', 'dark:hover:bg-blue-950/40');
+        if (btn.innerText.trim() === qData.correct.trim()) { btn.className = "btn-touch w-full p-4 rounded-2xl border-2 border-green bg-green-50 dark:bg-green-950/50 text-green dark:text-green-400 font-black text-left text-lg"; }
+      });
+
+      if (isCorrect) {
+        quizScoreCount++;
+        selectedBtn.className = "btn-touch w-full p-4 rounded-2xl border-2 border-green bg-green-50 dark:bg-green-950/50 text-green dark:text-green-400 font-black text-left text-lg";
+      } else {
+        selectedBtn.className = "btn-touch w-full p-4 rounded-2xl border-2 border-danger bg-red-50 dark:bg-red-950/50 text-danger dark:text-danger-dark font-black text-left text-lg line-through";
+        quizFailedQuestions.push({ originalIdx: qData.originalIdx, q: qData.q, chosen: selectedText, correct: qData.correct });
+      }
+
+      const explBox = document.getElementById('quiz-explanation-box');
+      explBox.classList.remove('hidden');
+      if (isCorrect) {
+        explBox.className = "p-4 rounded-2xl bg-green-50 dark:bg-green-950/40 border-2 border-green text-green dark:text-green-400 text-base leading-relaxed font-bold";
+        explBox.innerHTML = t('quiz_fb_ok') + qData.expl;
+      } else {
+        explBox.className = "p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border-2 border-red-200 dark:border-red-900 text-slate-800 dark:text-dark-text text-base leading-relaxed font-medium";
+        explBox.innerHTML = t('quiz_fb_bad') + qData.expl;
+      }
+      document.getElementById('quiz-next-container').classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      quizCurrentIdx++;
+      if (quizCurrentIdx < quizQuestionList.length) renderQuizQuestion();
+      else finishQuiz();
+    }
+
+    function finishQuiz() {
+      document.getElementById('quiz-screen-question').classList.add('hidden');
+      document.getElementById('quiz-screen-results').classList.remove('hidden');
+
+      const total = quizQuestionList.length;
+      const finalScore = (quizScoreCount / total) * 10;
+
+      if (quizIsFullRun) {
+        if (bestQuizScore === null || finalScore > bestQuizScore) bestQuizScore = finalScore;
+        saveState(); updateDashboardStats();
+        document.getElementById('quiz-final-score').classList.remove('hidden');
+        document.getElementById('quiz-final-score').innerText = `${finalScore.toFixed(1)} / 10`;
+        const pct = Math.round((quizScoreCount / total) * 100);
+        document.getElementById('quiz-final-summary').innerText = t('quiz_sum_full', { h: quizScoreCount, t: total, p: pct });
+      } else {
+        document.getElementById('quiz-final-score').classList.add('hidden');
+        document.getElementById('quiz-final-summary').innerText = t('quiz_sum_retry', { h: quizScoreCount, t: total });
+      }
+
+      const retryFailedBtn = document.getElementById('btn-quiz-retry-failed');
+      const failedContainer = document.getElementById('quiz-failed-list-container');
+      const failedItems = document.getElementById('quiz-failed-items');
+
+      if (quizFailedQuestions.length > 0) {
+        retryFailedBtn.classList.remove('hidden'); failedContainer.classList.remove('hidden'); failedItems.innerHTML = '';
+        quizFailedQuestions.forEach((item) => {
+          const fEl = document.createElement('div');
+          fEl.className = "p-3 bg-slate-50 dark:bg-dark-bg rounded-2xl border border-slate-200 dark:border-dark-border space-y-1";
+          fEl.innerHTML = `<p class="font-black text-navy dark:text-white">${item.q}</p><p class="text-sm text-danger dark:text-danger-dark">${t('quiz_fail_opt', { o: item.chosen })}</p><p class="text-sm text-green dark:text-green-400 font-bold">${t('quiz_fail_cor', { c: item.correct })}</p>`;
+          failedItems.appendChild(fEl);
+        });
+      } else {
+        retryFailedBtn.classList.add('hidden'); failedContainer.classList.add('hidden');
+      }
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      if(!toast) return;
+      toast.innerText = text;
+      toast.classList.remove('translate-y-28', 'opacity-0');
+      setTimeout(() => { toast.classList.add('translate-y-28', 'opacity-0'); }, 2000);
+    }
+
+    function initApp() {
+      try {
+        const storedLearned = localStorage.getItem('aulanext_learned_q');
+        const storedPending = localStorage.getItem('aulanext_pending_q');
+        const storedReadSec = localStorage.getItem('aulanext_read_sec');
+        const storedBestScore = localStorage.getItem('aulanext_best_score');
+        
+        if (storedLearned) learnedCards = new Set(JSON.parse(storedLearned));
+        if (storedPending) pendingCards = new Set(JSON.parse(storedPending));
+        if (storedReadSec) readSections = new Set(JSON.parse(storedReadSec));
+        if (storedBestScore) bestQuizScore = parseFloat(storedBestScore);
+      } catch (e) { console.warn(e); }
+
+      applyTranslations();
+      
+      const rcContainer = document.getElementById('rock-cycle-svg-container');
+      if (rcContainer) rcContainer.innerHTML = uniqueSvg(SVG_DIAGRAMS.rockCycle);
+      const mohsRefContainer = document.getElementById('mohs-svg-reference-container');
+      if (mohsRefContainer) mohsRefContainer.innerHTML = uniqueSvg(SVG_DIAGRAMS.mohsScale);
+
+      updateDashboardStats();
+      initMohsGame();
+      initScratchSim();
+      updateThemeToggleIcon();
+
+      document.addEventListener('keydown', (e) => {
+        if (currentTab === 'questions' && currentQuestionsSubView === 'cards') {
+          if (e.code === 'Space') { e.preventDefault(); toggleCardFlip(); } 
+          else if (e.code === 'ArrowRight') { nextCard(); } 
+          else if (e.code === 'ArrowLeft') { prevCard(); }
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
